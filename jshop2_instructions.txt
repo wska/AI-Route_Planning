@@ -1,0 +1,10 @@
+1. Download .zip from: htAt tps://github.com/mas-group/jshop2
+
+# In jshop2 root directory
+2. $ export CLASSPATH=~/Downloads/jshop2-master/antlr.jar:~/Downloads/jshop2-master/bin.build/JSHOP2.jar:.
+
+# To compile all files
+3. $ make c
+
+# To start the GUI
+4. # make 2
