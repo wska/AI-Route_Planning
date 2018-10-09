@@ -1,6 +1,6 @@
 In this file, I will add some graphs that we can utilize in the project. The graphs will follow cartesian coordinates in a (x,y) plane.
 
-The graph will assume that the coordinates are non-directed, meaning that a edge from (x,y) to (z,k) also follows that (z,k) has a edge to (x,y).
+The graph will assume that the edges are non-directed, meaning that a edge from (x,y) to (z,k) also follows that (z,k) has a edge to (x,y).
 The coordinates are based around a grid-based approach, and takes place entirely in the 1st quadrant of a cartesian coordinate system.
 This means that for a 5 by 5 graph(5x5), the grid will be based from (0,0) to (4,4).
 
