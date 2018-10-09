@@ -1,0 +1,8 @@
+1
+agent-at
+1
+move-agent
+3
+!move-agent
+!add-protection
+!delete-protection

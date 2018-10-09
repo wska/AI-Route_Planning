@@ -1,0 +1,16 @@
+(defproblem problem routeplanning
+  (
+    (agent-at agent1 LOC1)
+    (agent-at agent2 LOC2)
+    (agent-at agent3 LOC3)
+    (agent-at agent4 LOC4)
+    (agent-at agent5 LOC5)
+  )
+  (
+    (move-agent agent1 LOC2)
+    (move-agent agent2 LOC3)
+    (move-agent agent3 LOC4)
+    (move-agent agent4 LOC5)
+    (move-agent agent5 LOC6)
+  )
+)
