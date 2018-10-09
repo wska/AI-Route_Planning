@@ -9,5 +9,5 @@ Therefore, the starting point for the end of the grid based map will always be i
 The format of the files are as follows:
 
 Two integers, representing the total size of the grid(etc, "5 5" for a 5x5 grid).
-One integer, displaying the total number of edges present in the graph (etc, 23, for 23 edges).
-A number of edge coordinates, displayed as x,y z,k, for a vertex between the cartesian coordinates (x,y) and (z,k).
+One integer, displaying the total number of vertices present in the graph (etc, 23, for 23 vertices).
+A number of vertex coordinates, displayed as x,y z,k, for a vertex between the cartesian coordinates (x,y) and (z,k).
