@@ -4,7 +4,7 @@ The graph will assume that the coordinates are non-directed, meaning that a edge
 The coordinates are based around a grid-based approach, and takes place entirely in the 1st quadrant of a cartesian coordinate system.
 This means that for a 5 by 5 graph(5x5), the grid will be based from (0,0) to (4,4).
 
-Therefore, the starting point for the end of the grid based map will always be in origo (0,0).
+Therefore, the starting point for the grid based map will always be in origo (0,0), and then work its way outwards with positive X and Y coordinates.
 
 The format of the files are as follows:
 
