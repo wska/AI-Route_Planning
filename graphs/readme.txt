@@ -6,6 +6,8 @@ This means that for a 5 by 5 graph(5x5), the grid will be based from (0,0) to (4
 
 Therefore, the starting point for the grid based map will always be in origo (0,0), and then work its way outwards with positive X and Y coordinates.
 
+The vertices will exclusively be vertical or horizontal. There are no diagonal vertices. 
+
 The format of the files are as follows:
 
 Two integers, representing the total size of the grid(etc, "5 5" for a 5x5 grid).
