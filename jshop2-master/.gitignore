@@ -5,3 +5,5 @@ bin/
 *.class
 *.java
 *.txt
+
+classpath.sh
