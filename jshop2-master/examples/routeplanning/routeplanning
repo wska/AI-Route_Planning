@@ -1,55 +1,175 @@
-;;;; OPERATORS
-; (:operator h P D A [c])
-; where:
-; - h is the operator's head; is a primitive ordinary task atom (i.e., a non-
-;   immediate task atom with a task symbol that begins with an exclamation point).
-; - P the operator's precondition; a logical precondition
-;   P can contain any variable symbols that can be either in h or not, provided that there
-;   can be at most one satisfier for P in the current state at any given point in the planning process.
-; - D the operator’s delete list
-; - A the operator's add list
-; - c the operator's cost, which defaults to 1 if omitted
+;;;; AI project: multi-agent routeplanning
 
-;;;; METHODS
-; (:method h [name1] L1 T1 [name2] L2 T2 ... [namen] Ln Tn)
-; where:
-; - h is a compound ordinary task atom -- i.e. the method's head
-; - Each Li is a precondition for the method
-; - Each T1 is a tail of the method -- i.e. a task list
-; - Each namei is the name for the succeeding (Li Ti) pair; useful for debugging domain descriptions
+;;;; Authors:
+;;;; - Adrian Chmielewski-Anders
+;;;; - Alex Mellado
+;;;; - Daniel Skantz
+;;;; - William Skägerstrom
+;;;; - Bas Straathof
 
-;;;; PROTECTIONS
-; A :protection takes a logical atom (a) and should be put in the add list to tell JSHOP2
-; that it should not execute any operator that deletes (a)
+;;;; Solution in JSHOP2
 
 
 (defdomain routeplanning
   (
-    (:operator (!move-agent ?agent ?location-from ?location-to)
-    ()
-    ((agent-at ?agent ?location-from))
-    ((agent-at ?agent ?location-to) (:protection (agent-at ?agent ?location-to))))
+    (:operator
+      ;; define a valid move
+      (!move-to ?agent1 ?agent2 ?1from ?1to ?2from ?2to)
 
-    (:operator (!add-protection ?g)
-                ()
-                ()
-                ((:protection ?g))
-                )
+      ; preconditions
+      ((agent ?agent1)
+       (agent ?agent2)
 
-    (:operator (!delete-protection ?g)
-                ()
-                ((:protection ?g))
-                ()
-                )
+       (location ?from1)
+       (location ?to1)
+       (location ?from2)
+       (location ?to2)
 
-    (:method (move-agent ?agent ?location-to)
-      agent-already-there
-      ((agent-at ?agent ?location-to))
-      ((:immediate !add-protection (agent-at ?agent ?location-to)))
+       (can_move ?from1 ?to1)
+       (can_move ?from2 ?to2)
 
-      move-agent-to
-      ((agent-at ?agent ?location-from))
-      ((:immediate !move-agent ?agent ?location-from ?location-to)))
+       (at ?agent1 ?from1)
+       (at ?agent2 ?from2)
+      )
+
+      ; delete list
+      ((at ?agent1 ?from1)
+       (at ?agent2 ?from2)
+      )
+
+      ; add list
+      ((at ?agent1 ?to1)
+       (at ?agent2 ?to2)
+      )
+    )
+
+    (:operator
+      ;; add a location to list of visited nodes
+      (!visit ?location)
+      ()
+      ()
+      ((visited ?location))
+    )
+
+    (:operator
+      ;; delete a location to list of visited nodes
+      (!unvisit ?location)
+      ()
+      ((visited ?location))
+      ()
+    )
+
+    (:method
+      ;; move agent to a node
+      (move-to ?agent1 ?agent2 ?to1 ?to2)
+      ((at ?agent1 ?from1)
+       (at ?agent2 ?from2))
+      ((!visit ?from1)
+       (move-to ?agent1 ?from1 ?to1)
+       (!unvisit ?from1)
+
+       (!visit ?from2)
+       (move-to ?agent2 ?from2 ?to2)
+       (!unvisit ?from2)
+      )
+    )
+
+    (:method
+      ;; move both agents from their starting node to their destination node
+      (move-to ?agent1 ?agent2 ?from1 ?from2 ?to1 ?to2)
+
+      case1-both-agents-at-destination
+      ((at ?agent1 ?to1)
+       (at ?agent2 ?to2))
+      ()
+
+      case2-agent1-agent-at-destination-agent2-can-move-directly
+      ((at ?agent1 ?to1)
+       (can_move ?agent2 ?from2 ?to2))
+      ((!move-to ?agent2 ?from2 ?to2))
+
+      case3-agent1-agent-at-destination-agent2-cannot-move-directly
+      ((at ?agent1 ?to1)
+       (location ?mid)
+       (can_move ?from2 ?mid)
+       (not (visited ?mid))
+      )
+      ((!move-to ?agent2 ?from2 ?mid)
+        (!visit ?mid)
+        (move-to ?agent2 ?mid ?to2)
+        (!unvisit ?mid)
+      )
+
+      case4-agent1-agent-can-move-directly-agent2-at-destination
+      ((can_move ?agent1 ?from1 ?to1)
+       (at ?agent2 ?to2))
+      ((!move-to ?agent1 ?from1 ?to1))
+
+      case5-both-agents-can-move-directly
+      ((can_move ?agent1 ?from1 ?to1)
+       (can_move ?agent2 ?from2 ?to2))
+      ((!move-to ?agent1 ?from1 ?to1)
+       (!move-to ?agent2 ?from2 ?to2))
+
+      case6-agent1-can-move-directly-agent2-cannot-move-directly
+      ((can_move ?agent1 ?from1 ?to1)
+       (location ?mid)
+       (can_move ?from2 ?mid)
+       (not (visited ?mid)))
+      ((!move-to ?agent1 ?from1 ?to1)
+       (!move-to ?agent2 ?from2 ?mid)
+       (!visit ?mid)
+       (move-to ?agent2 ?mid ?to2)
+       (!unvisit ?mid))
+
+      case7-agent1-cannot-move-directly-agent2-at-destination
+      ((location ?mid)
+       (can_move ?from1 ?mid)
+       (not (visited ?mid))
+       (at ?agent2 ?to2))
+      ((!move-to ?agent1 ?from1 ?mid)
+        (!visit ?mid)
+        (move-to ?agent1 ?mid ?to1)
+        (!unvisit ?mid))
+
+      case8-agent1-cannot-move-directly-agent2-can-move-directly
+      ((location ?mid)
+       (can_move ?from1 ?mid)
+       (not (visited ?mid))
+       (can_move ?agent2 ?from2 ?to2))
+      ((!move-to ?agent1 ?from1 ?mid)
+        (!visit ?mid)
+        (move-to ?agent1 ?mid ?to1)
+        (!unvisit ?mid)
+       (!move-to ?agent2 ?from2 ?to2))
+
+      case9-both-agents-cannot-move-directly
+      ((location ?mid1)
+       (can_move ?from1 ?mid1)
+       (not (visited ?mid1))
+       (location ?mid2)
+       (can_move ?from2 ?mid2)
+       (not (visited ?mid2)))
+      ((!move-to ?agent1 ?from1 ?mid1)
+        (!visit ?mid1)
+        (move-to ?agent1 ?mid1 ?to1)
+        (!unvisit ?mid1)
+       (!move-to ?agent2 ?from2 ?mid2)
+        (!visit ?mid2)
+        (move-to ?agent2 ?mid2 ?to2)
+        (!unvisit ?mid2))
+    )
+
+    (:method
+      ;; goal method
+      (go-to-destination ?agent1 ?agent2 ?location1 ?location2)
+      ((location ?location1)
+       (location ?location2)
+       (agent ?agent1)
+       (agent ?agent2)
+      )
+      ((move-to ?agent1 ?agent2 ?location1 ?location2))
+    )
   )
 )
 

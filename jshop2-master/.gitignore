@@ -1,4 +1,12 @@
 .project
 .classpath
 bin/
+
+*.class
+*.java
+*.txt
+
 classpath.sh
+
+*.swp
+*.swo
