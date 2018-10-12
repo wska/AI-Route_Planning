@@ -72,11 +72,11 @@ d: src/JSHOP2/*.java
 	cd examples/forall; rm forallexample.java; rm forallexample.txt; rm problem.java; rm *.class
 
 9: bin.build/JSHOP2.jar
-	cd examples/rover; java JSHOP2.InternalDomain rover
-	cd examples/rover; java JSHOP2.InternalDomain -r problem
-	cd examples/rover; javac gui.java
-	cd examples/rover; java -Xmx256M gui
-	cd examples/rover; rm rover.java; rm rover.txt; rm problem.java; rm *.class
+	cd examples/routeplanning; java JSHOP2.InternalDomain routeplanning
+	cd examples/routeplanning; java JSHOP2.InternalDomain -r problem
+	cd examples/routeplanning; javac gui.java
+	cd examples/routeplanning; java -Xmx256M gui
+	cd examples/routeplanning; rm routeplanning.java; rm routeplanning.txt; rm problem.java; rm *.class
 
 10: bin.build/JSHOP2.jar
 	cd examples/blocks; java JSHOP2.InternalDomain blocks
@@ -97,4 +97,4 @@ d: src/JSHOP2/*.java
 	cd examples/routeplanning; java JSHOP2.InternalDomain -ra problem
 	cd examples/routeplanning; javac gui.java
 	cd examples/routeplanning; java gui
-	cd examples/routeplanning; rm madrts.java; rm madrts.txt; rm problem.java; rm *.class
+	cd examples/routeplanning; rm routeplanning.java; rm routeplanning.txt; rm problem.java; rm *.class
