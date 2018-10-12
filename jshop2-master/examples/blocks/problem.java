@@ -812,10 +812,6 @@ public class problem
 		s.add(new Predicate(0, 0, new TermList(TermConstant.getConstant(196), TermList.NIL)));
 		s.add(new Predicate(1, 0, new TermList(TermConstant.getConstant(197), TermList.NIL)));
 		s.add(new Predicate(3, 0, new TermList(TermConstant.getConstant(198), new TermList(TermConstant.getConstant(197), TermList.NIL))));
-		helper_0_createState0(s);
-	}
-
-	private static void helper_0_createState0(State s)	{
 		s.add(new Predicate(3, 0, new TermList(TermConstant.getConstant(199), new TermList(TermConstant.getConstant(198), TermList.NIL))));
 		s.add(new Predicate(3, 0, new TermList(TermConstant.getConstant(200), new TermList(TermConstant.getConstant(199), TermList.NIL))));
 		s.add(new Predicate(3, 0, new TermList(TermConstant.getConstant(201), new TermList(TermConstant.getConstant(200), TermList.NIL))));
@@ -946,9 +942,9 @@ public class problem
 		s.add(new Predicate(0, 0, new TermList(TermConstant.getConstant(310), TermList.NIL)));
 	}
 
-	public static LinkedList<Plan> getPlans()
+	public static LinkedList getPlans()
 	{
-		LinkedList<Plan> returnedPlans = new LinkedList<Plan>();
+		LinkedList returnedPlans = new LinkedList();
 		TermConstant.initialize(311);
 
 		Domain d = new blocks();
@@ -980,8 +976,7 @@ public class problem
 
 		return returnedPlans;
 	}
-
-	public static LinkedList<Predicate> getFirstPlanOps() {
-		return getPlans().getFirst().getOps();
+	public static LinkedList getFirstPlanOps() {
+		return ((Plan)getPlans().getFirst()).getOps();
 	}
 }
