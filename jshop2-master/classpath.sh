@@ -7,8 +7,8 @@ prepend_path()
   fi
 }
 
-prepend_path CLASSPATH 'pdw'/jshop2-master/antlr.jar
-prepend_path CLASSPATH 'pwd'/jshop2-master/bin.build/JSHOP2.jar
+prepend_path CLASSPATH $(pwd)/antlr.jar
+prepend_path CLASSPATH $(pwd)/bin.build/JSHOP2.jar
 
 echo $CLASSPATH
 export "CLASSPATH="CLASSPATH
