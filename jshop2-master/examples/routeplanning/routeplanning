@@ -14,21 +14,33 @@
   (
     (:operator
       ;; define a valid move
-      (!move-to ?agent ?from ?to)
+      (!move-to ?agent1 ?agent2 ?1from ?1to ?2from ?2to)
 
       ; preconditions
-      ((agent ?agent)
-       (location ?from)
-       (location ?to)
-       (can_move ?from ?to)
-       (at ?agent ?from)
+      ((agent ?agent1)
+       (agent ?agent2)
+
+       (location ?from1)
+       (location ?to1)
+       (location ?from2)
+       (location ?to2)
+
+       (can_move ?from1 ?to1)
+       (can_move ?from2 ?to2)
+
+       (at ?agent1 ?from1)
+       (at ?agent2 ?from2)
       )
 
       ; delete list
-      ((at ?agent ?from))
+      ((at ?agent1 ?from1)
+       (at ?agent2 ?from2)
+      )
 
       ; add list
-      ((at ?agent ?to))
+      ((at ?agent1 ?to1)
+       (at ?agent2 ?to2)
+      )
     )
 
     (:operator
@@ -49,46 +61,114 @@
 
     (:method
       ;; move agent to a node
-      (move-to ?agent ?to)
-      ((at ?agent ?from))
-      ((!visit ?from)
-       (move-to ?agent ?from ?to)
-       (!unvisit ?from)
+      (move-to ?agent1 ?agent2 ?to1 ?to2)
+      ((at ?agent1 ?from1)
+       (at ?agent2 ?from2))
+      ((!visit ?from1)
+       (move-to ?agent1 ?from1 ?to1)
+       (!unvisit ?from1)
+
+       (!visit ?from2)
+       (move-to ?agent2 ?from2 ?to2)
+       (!unvisit ?from2)
       )
     )
 
     (:method
-      ;; move agent from node a to node b
-      (move-to ?agent ?from ?to)
+      ;; move both agents from their starting node to their destination node
+      (move-to ?agent1 ?agent2 ?from1 ?from2 ?to1 ?to2)
 
-      case1-agent-already-at-location
-      ((at ?agent ?to))
+      case1-both-agents-at-destination
+      ((at ?agent1 ?to1)
+       (at ?agent2 ?to2))
       ()
 
-      case2-agent-can-move-to-destination-from-current-location
-      ((can_move ?from ?to))
-      ((!move-to ?agent ?from ?to))
+      case2-agent1-agent-at-destination-agent2-can-move-directly
+      ((at ?agent1 ?to1)
+       (can_move ?agent2 ?from2 ?to2))
+      ((!move-to ?agent2 ?from2 ?to2))
 
-      case3-agent-can-move-from-current-location-to-non-final-location
-      ((location ?mid)
-        ;; mid has to be a valid node
-        (can_move ?from ?mid)
-        (not (visited ?mid))
+      case3-agent1-agent-at-destination-agent2-cannot-move-directly
+      ((at ?agent1 ?to1)
+       (location ?mid)
+       (can_move ?from2 ?mid)
+       (not (visited ?mid))
       )
-      ((!move-to ?agent ?from ?mid)
+      ((!move-to ?agent2 ?from2 ?mid)
         (!visit ?mid)
-        (move-to ?agent ?mid ?to)
+        (move-to ?agent2 ?mid ?to2)
         (!unvisit ?mid)
       )
+
+      case4-agent1-agent-can-move-directly-agent2-at-destination
+      ((can_move ?agent1 ?from1 ?to1)
+       (at ?agent2 ?to2))
+      ((!move-to ?agent1 ?from1 ?to1))
+
+      case5-both-agents-can-move-directly
+      ((can_move ?agent1 ?from1 ?to1)
+       (can_move ?agent2 ?from2 ?to2))
+      ((!move-to ?agent1 ?from1 ?to1)
+       (!move-to ?agent2 ?from2 ?to2))
+
+      case6-agent1-can-move-directly-agent2-cannot-move-directly
+      ((can_move ?agent1 ?from1 ?to1)
+       (location ?mid)
+       (can_move ?from2 ?mid)
+       (not (visited ?mid)))
+      ((!move-to ?agent1 ?from1 ?to1)
+       (!move-to ?agent2 ?from2 ?mid)
+       (!visit ?mid)
+       (move-to ?agent2 ?mid ?to2)
+       (!unvisit ?mid))
+
+      case7-agent1-cannot-move-directly-agent2-at-destination
+      ((location ?mid)
+       (can_move ?from1 ?mid)
+       (not (visited ?mid))
+       (at ?agent2 ?to2))
+      ((!move-to ?agent1 ?from1 ?mid)
+        (!visit ?mid)
+        (move-to ?agent1 ?mid ?to1)
+        (!unvisit ?mid))
+
+      case8-agent1-cannot-move-directly-agent2-can-move-directly
+      ((location ?mid)
+       (can_move ?from1 ?mid)
+       (not (visited ?mid))
+       (can_move ?agent2 ?from2 ?to2))
+      ((!move-to ?agent1 ?from1 ?mid)
+        (!visit ?mid)
+        (move-to ?agent1 ?mid ?to1)
+        (!unvisit ?mid)
+       (!move-to ?agent2 ?from2 ?to2))
+
+      case9-both-agents-cannot-move-directly
+      ((location ?mid1)
+       (can_move ?from1 ?mid1)
+       (not (visited ?mid1))
+       (location ?mid2)
+       (can_move ?from2 ?mid2)
+       (not (visited ?mid2)))
+      ((!move-to ?agent1 ?from1 ?mid1)
+        (!visit ?mid1)
+        (move-to ?agent1 ?mid1 ?to1)
+        (!unvisit ?mid1)
+       (!move-to ?agent2 ?from2 ?mid2)
+        (!visit ?mid2)
+        (move-to ?agent2 ?mid2 ?to2)
+        (!unvisit ?mid2))
     )
 
     (:method
       ;; goal method
-      (go-to-destination ?agent ?location)
-      ((location ?location)
-       (agent ?agent)
+      (go-to-destination ?agent1 ?agent2 ?location1 ?location2)
+      ((location ?location1)
+       (location ?location2)
+       (agent ?agent1)
+       (agent ?agent2)
       )
-      ((move-to ?agent ?location))
+      ((move-to ?agent1 ?agent2 ?location1 ?location2))
     )
   )
 )
