@@ -1,4 +1,3 @@
-
 CLASSPATH=.
 prepend_path()
 {
@@ -7,8 +6,8 @@ prepend_path()
   fi
 }
 
-prepend_path CLASSPATH /home/bts/Downloads/jshop2-master/bin/antlr.jar
-prepend_path CLASSPATH /home/bts/Downloads/jshop2-master/bin/JSHOP2.jar
+prepend_path CLASSPATH /home/william/Documents/Courses/DD2380/a3/jshop2-master/antlr.jar
+prepend_path CLASSPATH /home/william/Documents/Courses/DD2380/a3/jshop2-master/bin.build/JSHOP2.jar
 
 echo $CLASSPATH
-export CLASSPATH
+export "CLASSPATH="CLASSPATH

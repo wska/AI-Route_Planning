@@ -1,3 +1,7 @@
 *.idea
 *.iml
 *.xml
+downward/
+jshop2-master/classpath.sh
+output.sas
+sas_plan
