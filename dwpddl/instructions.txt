@@ -1,0 +1,18 @@
+Instructions for running the .pddl files using the fast downward solver.
+
+1. Download the planner from http://www.fast-downward.org/
+2. There are instructions on how to install it. You need a few dependencies obtainable by a packet manager.
+3. Clone the repo mentioned in the instructions
+4. Create the default build (32-bit). Just follow the instructions on the page.
+5. After compiling it, it can be used to solve .pddl problems.
+6. For solving, it needs three things:
+  a) a domain.pddl file specifying the problem domain.
+  b) a problem.pddl specification about the problem instance.
+  c) instructions on which algorithm to use.
+
+EXAMPLE:
+Assumtions: Planner was unpacked in downward/, and the test files exist in dwpddl/
+The following promt causes fast-downward to solve the problem using the a-star algorithm with a landmark-cut heuristic:
+./downward/fast-downward.py dwpddl/path.pddl --search "astar(lmcut())"
+
+More information on additional algorithms and parameters are available on the website from (1).
