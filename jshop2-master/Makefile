@@ -91,10 +91,3 @@ d: src/JSHOP2/*.java
 	cd examples/madrts; javac gui.java
 	cd examples/madrts; java gui
 	cd examples/madrts; rm madrts.java; rm madrts.txt; rm problem.java; rm *.class
-
-12: bin.build/JSHOP2.jar
-	cd examples/routeplanning; java JSHOP2.InternalDomain routeplanning
-	cd examples/routeplanning; java JSHOP2.InternalDomain -ra problem
-	cd examples/routeplanning; javac gui.java
-	cd examples/routeplanning; java gui
-	cd examples/routeplanning; rm routeplanning.java; rm routeplanning.txt; rm problem.java; rm *.class
