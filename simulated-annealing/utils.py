@@ -13,14 +13,14 @@ def read_graph(path_graph, path_init):
 
     graph = nx.read_edgelist(path_graph)
 
-    with open(path_init, 'rU') as f:  # opens PW file
+    with open(path_init, 'r') as f:  # opens PW file
         reader = csv.reader(f)
         init_states = list(tuple(rec) for rec in csv.reader(f, delimiter=' '))
 
 
     #transform the nodes from string to unicode, the format that use networkx
 
-    init_states = [(agent[0].decode('unicode-escape'), agent[1].decode('unicode-escape')) for agent in init_states]
+    # init_states = [(agent[0].decode('unicode-escape'), agent[1].decode('unicode-escape')) for agent in init_states]
 
     return graph, init_states
 
