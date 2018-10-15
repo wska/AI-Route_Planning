@@ -84,6 +84,7 @@ def initial_guess(init_states, graph):
 def main():
     graph, init_states = utils.read_graph(os.getcwd() + ct.EDGE_LIST_PATH, os.getcwd() + ct.INITIAL_STATE_PATH)
 
+
     init_paths = initial_guess(init_states, graph)
     prob = PathsProblem(init_paths, graph)
     prob.steps = 100
@@ -98,6 +99,7 @@ def main():
     print(state)
     print(e)
 
+    utils.plot_graph_paths(graph, paths = state, colors = ['r', 'b'])
 
 if __name__ == '__main__':
     main()

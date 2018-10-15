@@ -2,6 +2,7 @@ import networkx as nx
 import os
 import constants as ct
 import csv
+import pylab as plt
 
 def read_graph(path_graph, path_init):
     """
@@ -30,3 +31,42 @@ def vertex_path_to_edge_path(vertex_path):
     edge_path = [(vertex_path[i], vertex_path[i+1]) for i in range(len(vertex_path)-1)]
 
     return edge_path
+
+def plot_graph_paths(graph, paths = [], colors = []):
+
+    # nx.draw_spring(graph, with_labels=True)
+
+    #ploting graph
+
+    pos = nx.spring_layout(graph)
+    nx.draw_networkx_nodes(graph,pos=pos)
+
+    # Adding goal-start
+
+    labeldict = {node:node for node in graph.nodes()}
+
+    for i in range(len(paths)):
+
+
+        labeldict[paths[i][0][0]] += ", start"
+
+        labeldict[paths[i][-1][1]] += ", goal"
+
+
+
+
+    nx.draw_networkx_labels(graph,pos=pos, labels= labeldict)
+    nx.draw_networkx_edges(graph, pos = pos)
+
+
+    # adding paths
+    for i in range(len(paths)):
+        nx.draw_networkx_edges(graph, pos = pos, edgelist = paths[i], edge_color=colors[i], width=5+2*len(paths)-2*i)
+
+
+
+
+
+    plt.show()
+
+
