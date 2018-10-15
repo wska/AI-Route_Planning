@@ -89,12 +89,12 @@
     (CAN_MOVE LOC20 LOC19)
 
     ;; the initial locations of the agents
-    (AT AGENT1 LOC1)
-    (AT AGENT2 LOC1)
+    (AT AGENT1 LOC6)
+    (AT AGENT2 LOC2)
   )
 
   ;; setting goals
-  ((GO-TO-DESTINATION AGENT1 AGENT2 LOC7 LOC7))
+  ((GO-TO-DESTINATION AGENT1 AGENT2 LOC8 LOC14))
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TEST CASES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
