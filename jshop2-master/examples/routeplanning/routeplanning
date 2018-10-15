@@ -1,4 +1,4 @@
-;;;; AI project: multi-agent routeplanning
+;;;; AI project: multi-agent routeplanning domain definition in JSHOP2
 
 ;;;; Authors:
 ;;;; - Adrian Chmielewski-Anders
@@ -7,14 +7,13 @@
 ;;;; - William Skägerstrom
 ;;;; - Bas Straathof
 
-;;;; Solution in JSHOP2
-
 
 (defdomain routeplanning
   (
+    ;;;;; METHODS
     (:operator
-      ;; define a valid move
-      (!move-to ?agent1 ?agent2 ?1from ?1to ?2from ?2to)
+      ;; define the precondition and results for valid moves for two agents
+      (!move-two-agents-to ?agent1 ?agent2 ?1from ?1to ?2from ?2to)
 
       ; preconditions
       ((agent ?agent1)
@@ -43,131 +42,226 @@
       )
     )
 
-    (:operator
-      ;; add a location to list of visited nodes
-      (!visit ?location)
-      ()
-      ()
-      ((visited ?location))
-    )
 
     (:operator
-      ;; delete a location to list of visited nodes
-      (!unvisit ?location)
+      ;; define the preconditions and results for a valid move for
+      ;; a single agent
+      (!move-one-agent-to ?agent ?from ?to)
+
+      ; preconditions
+      ((agent ?agent)
+       (location ?from)
+       (location ?to)
+       (can_move ?from ?to)
+       (at ?agent ?from)
+      )
+
+      ; delete list
+      ((at ?agent ?from))
+
+      ; add list
+      ((at ?agent ?to))
+    )
+
+
+    (:operator
+      ;; add a location to list of visited nodes for agent such that
+      ;; intermediate nodes between the start and goal node arn't visited twice
+      (!visit ?agent ?location)
+
+      ; preconditions
       ()
-      ((visited ?location))
+
+      ; delete list
+      ()
+
+      ; add list
+      ((visited ?agent ?location))
+    )
+
+
+    (:operator
+      ;; delete a location from the list of visited nodes for agent after the
+      ;; goal destination has been reached
+      (!unvisit ?agent ?location)
+
+      ; preconditions
+      ()
+
+      ; delete list
+      ((visited ?agent ?location))
+
+      ; add list
       ()
     )
 
+
+    ;;;;; METHODS
     (:method
-      ;; move agent to a node
+      ;; move agents to their respective goal nodes
       (move-to ?agent1 ?agent2 ?to1 ?to2)
+
+      ; preconditions
       ((at ?agent1 ?from1)
        (at ?agent2 ?from2))
-      ((!visit ?from1)
-       (move-to ?agent1 ?from1 ?to1)
-       (!unvisit ?from1)
 
-       (!visit ?from2)
-       (move-to ?agent2 ?from2 ?to2)
-       (!unvisit ?from2)
+      ; action/consequence
+      ((!visit ?agent1 ?from1)
+       (!visit ?agent2 ?from2)
+       (move-two-agents-to ?agent1 ?agent2 ?from1 ?to1 ?from2 ?to2)
+       (!unvisit ?agent1 ?from1)
+       (!unvisit ?agent2 ?from2)
       )
     )
+
 
     (:method
-      ;; move both agents from their starting node to their destination node
-      (move-to ?agent1 ?agent2 ?from1 ?from2 ?to1 ?to2)
+      ;; move agents from their starting node to their destination node
+      (move-two-agents-to ?agent1 ?agent2 ?from1 ?to1 ?from2 ?to2)
 
+      ;;;;; CASE 1
       case1-both-agents-at-destination
+
+      ; preconditions
       ((at ?agent1 ?to1)
        (at ?agent2 ?to2))
+
+      ; action/consequence
       ()
 
+      ;;;;; CASE 2
       case2-agent1-agent-at-destination-agent2-can-move-directly
-      ((at ?agent1 ?to1)
-       (can_move ?agent2 ?from2 ?to2))
-      ((!move-to ?agent2 ?from2 ?to2))
 
+      ; preconditions
+      ((at ?agent1 ?to1)
+       (can_move ?from2 ?to2))
+
+      ; action/consequence
+      ((!move-one-agent-to ?agent2 ?from2 ?to2))
+
+
+      ;;;;; CASE 3
       case3-agent1-agent-at-destination-agent2-cannot-move-directly
+
+      ; preconditions
       ((at ?agent1 ?to1)
        (location ?mid)
        (can_move ?from2 ?mid)
-       (not (visited ?mid))
-      )
-      ((!move-to ?agent2 ?from2 ?mid)
-        (!visit ?mid)
-        (move-to ?agent2 ?mid ?to2)
-        (!unvisit ?mid)
-      )
+       (not (visited ?agent2 ?mid)))
 
+      ; action/consequence
+      ((!move-one-agent-to ?agent2 ?from2 ?mid)
+       (!visit ?agent2 ?mid)
+       (move-two-agents-to ?agent1 ?agent2 ?to1 ?to1 ?mid ?to2)
+       (!unvisit ?agent2 ?mid))
+
+
+      ;;;;; CASE 4
       case4-agent1-agent-can-move-directly-agent2-at-destination
-      ((can_move ?agent1 ?from1 ?to1)
+
+      ; preconditions
+      ((can_move ?from1 ?to1)
        (at ?agent2 ?to2))
-      ((!move-to ?agent1 ?from1 ?to1))
 
+      ; action/consequence
+      ((!move-one-agent-to ?agent1 ?from1 ?to1))
+
+
+      ;;;;; CASE 5
       case5-both-agents-can-move-directly
-      ((can_move ?agent1 ?from1 ?to1)
-       (can_move ?agent2 ?from2 ?to2))
-      ((!move-to ?agent1 ?from1 ?to1)
-       (!move-to ?agent2 ?from2 ?to2))
 
+      ; preconditions
+      ((can_move ?from1 ?to1)
+       (can_move ?from2 ?to2))
+
+      ; action/consequence
+      ((!move-one-agent-to ?agent1 ?from1 ?to1)
+       (!move-one-agent-to ?agent2 ?from2 ?to2))
+
+
+      ;;;;; CASE 6
       case6-agent1-can-move-directly-agent2-cannot-move-directly
-      ((can_move ?agent1 ?from1 ?to1)
+
+      ; preconditions
+      ((can_move ?from1 ?to1)
        (location ?mid)
        (can_move ?from2 ?mid)
-       (not (visited ?mid)))
-      ((!move-to ?agent1 ?from1 ?to1)
-       (!move-to ?agent2 ?from2 ?mid)
-       (!visit ?mid)
-       (move-to ?agent2 ?mid ?to2)
-       (!unvisit ?mid))
+       (not (visited ?agent2 ?mid)))
 
+      ; action/consequence
+      ((!move-one-agent-to ?agent1 ?from1 ?to1)
+       (!move-one-agent-to ?agent2 ?from2 ?mid)
+       (!visit ?agent2 ?mid)
+       (move-two-agents-to ?agent1 ?agent2 ?to1 ?to1 ?mid ?to2)
+       (!unvisit ?agent2 ?mid))
+
+
+      ;;;;; CASE 7
       case7-agent1-cannot-move-directly-agent2-at-destination
+
+      ; preconditions
       ((location ?mid)
        (can_move ?from1 ?mid)
-       (not (visited ?mid))
+       (not (visited ?agent1 ?mid))
        (at ?agent2 ?to2))
-      ((!move-to ?agent1 ?from1 ?mid)
-        (!visit ?mid)
-        (move-to ?agent1 ?mid ?to1)
-        (!unvisit ?mid))
 
+      ; action/consequence
+      ((!move-one-agent-to ?agent1 ?from1 ?mid)
+       (!visit ?agent1 ?mid)
+       (move-two-agents-to ?agent1 ?agent2 ?mid ?to1 ?to2 ?to2)
+       (!unvisit ?agent1 ?mid))
+
+
+      ;;;;; CASE 8
       case8-agent1-cannot-move-directly-agent2-can-move-directly
+
+      ; preconditions
       ((location ?mid)
        (can_move ?from1 ?mid)
-       (not (visited ?mid))
-       (can_move ?agent2 ?from2 ?to2))
-      ((!move-to ?agent1 ?from1 ?mid)
-        (!visit ?mid)
-        (move-to ?agent1 ?mid ?to1)
-        (!unvisit ?mid)
-       (!move-to ?agent2 ?from2 ?to2))
+       (not (visited ?agent1 ?mid))
+       (can_move ?from2 ?to2))
 
+      ; action/consequence
+      ((!move-one-agent-to ?agent1 ?from1 ?mid)
+       (!visit ?agent1 ?mid)
+       (move-two-agents-to ?agent1 ?agent2 ?mid ?to1 ?from2 ?to2)
+       (!unvisit ?agent1 ?mid))
+
+
+      ;;;;; CASE 9
       case9-both-agents-cannot-move-directly
+
+      ; preconditions
       ((location ?mid1)
        (can_move ?from1 ?mid1)
-       (not (visited ?mid1))
+       (not (visited ?agent1 ?mid1))
        (location ?mid2)
        (can_move ?from2 ?mid2)
-       (not (visited ?mid2)))
-      ((!move-to ?agent1 ?from1 ?mid1)
-        (!visit ?mid1)
-        (move-to ?agent1 ?mid1 ?to1)
-        (!unvisit ?mid1)
-       (!move-to ?agent2 ?from2 ?mid2)
-        (!visit ?mid2)
-        (move-to ?agent2 ?mid2 ?to2)
-        (!unvisit ?mid2))
+       (not (visited ?agent2 ?mid2)))
+
+      ; action/consequence
+      ((!move-one-agent-to ?agent1 ?from1 ?mid1)
+       (!move-one-agent-to ?agent2 ?from2 ?mid2)
+       (!visit ?agent1 ?mid1)
+       (!visit ?agent2 ?mid2)
+       (move-two-agents-to ?agent1 ?agent2 ?mid1 ?to1 ?mid2 ?to2)
+       (!unvisit ?agent1 ?mid1)
+       (!unvisit ?agent2 ?mid2))
     )
+
 
     (:method
       ;; goal method
       (go-to-destination ?agent1 ?agent2 ?location1 ?location2)
+
+      ; preconditions
       ((location ?location1)
        (location ?location2)
        (agent ?agent1)
        (agent ?agent2)
       )
+
+      ; action/consequence
       ((move-to ?agent1 ?agent2 ?location1 ?location2))
     )
   )
