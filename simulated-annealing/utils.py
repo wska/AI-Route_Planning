@@ -55,6 +55,6 @@ def plot_graph_paths(graph, paths=[], colors=[]):
     # adding paths
     for i in range(len(paths)):
         nx.draw_networkx_edges(graph, pos=pos, edgelist=paths[i],
-                               width=5 + 2 * len(paths) - 2 * i)
+                               width=5 + 1.5 * (len(paths) - i))
 
     plt.show()

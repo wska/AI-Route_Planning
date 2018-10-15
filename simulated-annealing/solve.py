@@ -118,7 +118,7 @@ def main():
         print(path)
     print(e)
 
-    utils.plot_graph_paths(graph, paths=state, colors=['r', 'g', 'p', 'y', 'o', 'm', 'c'])
+    utils.plot_graph_paths(graph, paths=state, colors=['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w'])
 
 
 if __name__ == '__main__':
