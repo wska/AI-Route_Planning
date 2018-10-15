@@ -4,12 +4,19 @@
              node8 node9 node10 node11 node12 node13
              node14 node15 node16 node17 node18 node19
              node20 node21 node22 node23
-             agenta)
+             Agent1 Agent2 Agent3)
    (:init 
           (= (total-cost) 0)  ; Keeps track of the total cost of a path, initializes to 0.
 
-          (agent agenta)
-          (at agenta node1)
+          (agent Agent1)
+          (at Agent1 node1)
+
+          (agent Agent2)
+          (at Agent2 node14)
+
+          (agent Agent3)
+          (at Agent3 node21)
+        
 
           (node node1)
           (node node2)
@@ -105,6 +112,8 @@
           (= (travelCost node19 node20) 1)
           
           )
-   (:goal (at agenta node20)) ; Goal specification for a given agent
+   (:goal  (and (at Agent1 node20) (at Agent2 node3) (at Agent3 node15) )
+                
+    ) ; Goal specification for a given agent
    (:metric minimize (total-cost)) ; Tells the solver that this is a minimization problem, aka, try to get the total-cost as low as possible.
    )
