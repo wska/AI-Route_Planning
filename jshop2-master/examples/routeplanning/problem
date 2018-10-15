@@ -1,12 +1,20 @@
+;;;; AI project: multi-agent routeplanning problem definition in JSHOP2
+
+;;;; Authors:
+;;;; - Adrian Chmielewski-Anders
+;;;; - Alex Mellado
+;;;; - Daniel Skantz
+;;;; - William Skägerstrom
+;;;; - Bas Straathof
+
+
 (defproblem problem routeplanning
   (
-    ;; defining the agents
+    ;; the agents
     (AGENT AGENT1)
     (AGENT AGENT2)
-    (AGENT AGENT3)
 
-    ;; defining all possible locations
-    (LOCATION LOC0)
+    ;; the possible locations
     (LOCATION LOC1)
     (LOCATION LOC2)
     (LOCATION LOC3)
@@ -31,7 +39,7 @@
     (LOCATION LOC22)
     (LOCATION LOC23)
 
-    ;; defining valid moves corresponding to the edge-list
+    ;; definition of valid moves corresponding to the edge-list
     ;; see: https://github.com/adrianc-a/a3/blob/master/graphs/edgeList.in
     (CAN_MOVE LOC1 LOC6)
     (CAN_MOVE LOC6 LOC1)
@@ -68,7 +76,7 @@
     (CAN_MOVE LOC12 LOC13)
     (CAN_MOVE LOC13 LOC12)
     (CAN_MOVE LOC13 LOC14)
-    (CAN_MOVE LOC14 LOC14)
+    (CAN_MOVE LOC14 LOC13)
     (CAN_MOVE LOC14 LOC15)
     (CAN_MOVE LOC15 LOC14)
     (CAN_MOVE LOC16 LOC17)
@@ -80,15 +88,56 @@
     (CAN_MOVE LOC19 LOC20)
     (CAN_MOVE LOC20 LOC19)
 
-    ;; defining the initial locations of the agents
-    (AT AGENT1 LOC5)
-    (AT AGENT2 LOC18)
-    (AT AGENT3 LOC2)
+    ;; the initial locations of the agents
+    (AT AGENT1 LOC1)
+    (AT AGENT2 LOC1)
   )
 
   ;; setting goals
-  (:unordered
-    (GO-TO-DESTINATION AGENT1 AGENT2 LOC9 LOC23)
-  )
+  ((GO-TO-DESTINATION AGENT1 AGENT2 LOC7 LOC7))
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TEST CASES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;; under the assumption that agent1 starts from loc1 and agent2 from loc2 ;;;;;
+
+  ;; the initial locations of the agents
+  ; (AT AGENT1 LOC1)
+  ; (AT AGENT2 LOC2)
+
+  ;; case 1: both agents already are at their goal destination
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC1 LOC2))
+
+  ;; case 2: agent1 already is at its goal destination and agent2 can reach
+  ;; its goal destination in one valid move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC1 LOC7))
+
+  ;; case 3: agent1 already is at its goal destination and agent2 can reach
+  ;; its goal destination in more than valid move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC1 LOC6))
+
+  ;; case 4: agent1 can reach its goal destination in one valid move and agent2
+  ;; is already at its goal destination
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC6 LOC2))
+
+  ;; case 5: both agent1 and agent2 can reach their goal destination in one valid
+  ;; move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC6 LOC7))
+
+  ;; case 6: agent1 can reach their goal destination in one valid move and agent2
+  ;; can reach its goal destination in more than one valid move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC6 LOC6))
+
+  ;; case 7: agent1 can reach its goal destination in more than one valid move
+  ;; and agent2 is already at its goal destination
+  ;; can reach its goal destination in more than one valid move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC7 LOC2))
+
+  ;; case 8: agent1 can reach its goal destination in more than one valid move
+  ;; and agent2 can reach its goal destination in a single move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC7 LOC6))
+
+  ;; case 9: both agent1 and agent2 can reach their goal destination in more
+  ;; than one valid move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC7 LOC7))
 )
 
