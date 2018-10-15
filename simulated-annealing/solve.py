@@ -1,5 +1,5 @@
 from simanneal import Annealer
-from numpy import tanh
+from math import log10
 import networkx as nx
 import matplotlib.pyplot as plt
 import os
@@ -7,6 +7,23 @@ from random import randint
 
 import constants as ct
 import utils
+
+
+def congestion_cost(n):
+    """
+    Piecewise function which is linear until n=2, then quadratic, then
+    logarithmic. I figure that up to a certain point, some more traffic is fine,
+    then it gets a lot worse, but after some point the road cannot handle any
+    more traffic at all
+    :param n:
+    :return:
+    """
+    if n < 2:
+        return n
+    elif n < 10:
+        return 1.0 / 2.0 * n ** 2
+    else:
+        return log10(n) * 50
 
 
 def collective_cost(graph, agents_paths):
@@ -21,8 +38,9 @@ def collective_cost(graph, agents_paths):
             for agent in agents_paths:
                 if t < len(agent) and agent[t] == edge:
                     num_agents_on_edge += 1
-            total_cost += 20 * tanh(num_agents_on_edge / 20.0)
+            total_cost += congestion_cost(num_agents_on_edge)
     return total_cost
+
 
 # This is the problem we are solving
 class PathsProblem(Annealer):
@@ -84,22 +102,24 @@ def initial_guess(init_states, graph):
 def main():
     graph, init_states = utils.read_graph(os.getcwd() + ct.EDGE_LIST_PATH, os.getcwd() + ct.INITIAL_STATE_PATH)
 
-
     init_paths = initial_guess(init_states, graph)
     prob = PathsProblem(init_paths, graph)
-    prob.steps = 100
+    prob.steps = 3000
 
     state, e = prob.anneal()
 
     print('Original ')
-    print(init_paths)
+    for path in init_paths:
+        print(path)
     print(collective_cost(graph, init_paths))
 
     print('Annealed')
-    print(state)
+    for path in state:
+        print(path)
     print(e)
 
-    utils.plot_graph_paths(graph, paths = state, colors = ['r', 'b'])
+    utils.plot_graph_paths(graph, paths=state, colors=['r', 'g', 'p', 'y', 'o', 'm', 'c'])
+
 
 if __name__ == '__main__':
     main()
