@@ -3,6 +3,7 @@ import os
 import constants as ct
 import csv
 import pylab as plt
+from math import log10
 from math import sqrt
 
 
@@ -85,3 +86,59 @@ def plot_graph_paths(graph, paths=[]):
     # adding paths
 
     nx.draw_networkx_edges(graph, pos=pos, edgelist=unique_edges, width=counts)
+
+
+
+
+def congestion_cost(n):
+    """
+    Piecewise function which is linear until n=2, then quadratic, then
+    logarithmic. I figure that up to a certain point, some more traffic is fine,
+    then it gets a lot worse, but after some point the road cannot handle any
+    more traffic at all
+    :param n:
+    :return:
+    """
+    if n < 2:
+        return n
+    elif n < 10:
+        return 1.0 / 2.0 * n ** 2
+    else:
+        return log10(n) * 50
+
+
+def collective_cost(graph, agents_paths):
+    total_cost = 0
+
+    edge_pool = set([link for agent in agents_paths for link in agent])
+
+    # this way we assume each agent is travelling for T time steps
+    for t in range(nx.number_of_nodes(graph)):
+        for edge in edge_pool:
+            num_agents_on_edge = 0
+            for agent in agents_paths:
+                if t < len(agent) and agent[t] == edge:
+                    num_agents_on_edge += 1
+            total_cost += congestion_cost(num_agents_on_edge)
+    return total_cost
+
+
+
+# give an initial set of paths for each agent
+def initial_guess(init_states, graph):
+    """
+
+    :param init_states: [(init_node, goal_node), ..., (init_node, goal_node)]
+    :param graph:
+    :return:
+    """
+    init_paths = []
+
+    for start, goal in init_states:
+        shortest = nx.shortest_path(graph, source=start, target=goal)
+
+        shortest = vertex_path_to_edge_path(shortest)
+
+        init_paths.append(shortest)
+
+    return init_paths
