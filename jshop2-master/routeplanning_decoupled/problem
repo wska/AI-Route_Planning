@@ -1,0 +1,103 @@
+;;;; AI project: multi-agent routeplanning problem definition in JSHOP2
+;;;; using a decoupled approach
+
+;;;; Authors:
+;;;; - Adrian Chmielewski-Anders
+;;;; - Alex Mellado
+;;;; - Daniel Skantz
+;;;; - William Skägerstrom
+;;;; - Bas Straathof
+
+
+(defproblem problem routeplanning
+  (
+    ;; defining the agents
+    (AGENT AGENT1)
+    (AGENT AGENT2)
+
+    ;; defining all possible locations
+    (LOCATION LOC0)
+    (LOCATION LOC1)
+    (LOCATION LOC2)
+    (LOCATION LOC3)
+    (LOCATION LOC4)
+    (LOCATION LOC5)
+    (LOCATION LOC6)
+    (LOCATION LOC7)
+    (LOCATION LOC8)
+    (LOCATION LOC9)
+    (LOCATION LOC10)
+    (LOCATION LOC11)
+    (LOCATION LOC12)
+    (LOCATION LOC13)
+    (LOCATION LOC14)
+    (LOCATION LOC15)
+    (LOCATION LOC16)
+    (LOCATION LOC17)
+    (LOCATION LOC18)
+    (LOCATION LOC19)
+    (LOCATION LOC20)
+    (LOCATION LOC21)
+    (LOCATION LOC22)
+    (LOCATION LOC23)
+
+    ;; defining valid moves corresponding to the edge-list
+    ;; see: https://github.com/adrianc-a/a3/blob/master/graphs/edgeList.in
+    (CAN_MOVE LOC1 LOC6)
+    (CAN_MOVE LOC6 LOC1)
+    (CAN_MOVE LOC2 LOC7)
+    (CAN_MOVE LOC7 LOC2)
+    (CAN_MOVE LOC3 LOC8)
+    (CAN_MOVE LOC8 LOC3)
+    (CAN_MOVE LOC4 LOC9)
+    (CAN_MOVE LOC9 LOC4)
+    (CAN_MOVE LOC7 LOC12)
+    (CAN_MOVE LOC12 LOC7)
+    (CAN_MOVE LOC8 LOC13)
+    (CAN_MOVE LOC13 LOC8)
+    (CAN_MOVE LOC9 LOC14)
+    (CAN_MOVE LOC14 LOC9)
+    (CAN_MOVE LOC12 LOC17)
+    (CAN_MOVE LOC17 LOC12)
+    (CAN_MOVE LOC13 LOC18)
+    (CAN_MOVE LOC18 LOC13)
+    (CAN_MOVE LOC16 LOC21)
+    (CAN_MOVE LOC21 LOC16)
+    (CAN_MOVE LOC17 LOC22)
+    (CAN_MOVE LOC22 LOC17)
+    (CAN_MOVE LOC18 LOC23)
+    (CAN_MOVE LOC23 LOC18)
+    (CAN_MOVE LOC4 LOC5)
+    (CAN_MOVE LOC5 LOC4)
+    (CAN_MOVE LOC6 LOC7)
+    (CAN_MOVE LOC7 LOC6)
+    (CAN_MOVE LOC9 LOC10)
+    (CAN_MOVE LOC10 LOC9)
+    (CAN_MOVE LOC11 LOC12)
+    (CAN_MOVE LOC12 LOC11)
+    (CAN_MOVE LOC12 LOC13)
+    (CAN_MOVE LOC13 LOC12)
+    (CAN_MOVE LOC13 LOC14)
+    (CAN_MOVE LOC14 LOC14)
+    (CAN_MOVE LOC14 LOC15)
+    (CAN_MOVE LOC15 LOC14)
+    (CAN_MOVE LOC16 LOC17)
+    (CAN_MOVE LOC17 LOC16)
+    (CAN_MOVE LOC17 LOC18)
+    (CAN_MOVE LOC18 LOC17)
+    (CAN_MOVE LOC18 LOC19)
+    (CAN_MOVE LOC19 LOC18)
+    (CAN_MOVE LOC19 LOC20)
+    (CAN_MOVE LOC20 LOC19)
+
+    ;; defining the initial locations of the agents
+    (AT AGENT1 LOC6)
+    (AT AGENT2 LOC2)
+  )
+
+  ;; setting goals
+  (:unordered
+    (GO-TO-DESTINATION AGENT1 LOC8)
+    (GO-TO-DESTINATION AGENT2 LOC14)
+  )
+)

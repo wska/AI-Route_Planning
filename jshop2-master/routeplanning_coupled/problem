@@ -1,0 +1,144 @@
+;;;; AI project: multi-agent routeplanning problem definition in JSHOP2
+;;;; using a coupled approach
+
+;;;; Authors:
+;;;; - Adrian Chmielewski-Anders
+;;;; - Alex Mellado
+;;;; - Daniel Skantz
+;;;; - William Skägerstrom
+;;;; - Bas Straathof
+
+
+(defproblem problem routeplanning
+  (
+    ;; the agents
+    (AGENT AGENT1)
+    (AGENT AGENT2)
+
+    ;; the possible locations
+    (LOCATION LOC1)
+    (LOCATION LOC2)
+    (LOCATION LOC3)
+    (LOCATION LOC4)
+    (LOCATION LOC5)
+    (LOCATION LOC6)
+    (LOCATION LOC7)
+    (LOCATION LOC8)
+    (LOCATION LOC9)
+    (LOCATION LOC10)
+    (LOCATION LOC11)
+    (LOCATION LOC12)
+    (LOCATION LOC13)
+    (LOCATION LOC14)
+    (LOCATION LOC15)
+    (LOCATION LOC16)
+    (LOCATION LOC17)
+    (LOCATION LOC18)
+    (LOCATION LOC19)
+    (LOCATION LOC20)
+    (LOCATION LOC21)
+    (LOCATION LOC22)
+    (LOCATION LOC23)
+
+    ;; definition of valid moves corresponding to the edge-list
+    ;; see: https://github.com/adrianc-a/a3/blob/master/graphs/edgeList.in
+    (CAN_MOVE LOC1 LOC6)
+    (CAN_MOVE LOC6 LOC1)
+    (CAN_MOVE LOC2 LOC7)
+    (CAN_MOVE LOC7 LOC2)
+    (CAN_MOVE LOC3 LOC8)
+    (CAN_MOVE LOC8 LOC3)
+    (CAN_MOVE LOC4 LOC9)
+    (CAN_MOVE LOC9 LOC4)
+    (CAN_MOVE LOC7 LOC12)
+    (CAN_MOVE LOC12 LOC7)
+    (CAN_MOVE LOC8 LOC13)
+    (CAN_MOVE LOC13 LOC8)
+    (CAN_MOVE LOC9 LOC14)
+    (CAN_MOVE LOC14 LOC9)
+    (CAN_MOVE LOC12 LOC17)
+    (CAN_MOVE LOC17 LOC12)
+    (CAN_MOVE LOC13 LOC18)
+    (CAN_MOVE LOC18 LOC13)
+    (CAN_MOVE LOC16 LOC21)
+    (CAN_MOVE LOC21 LOC16)
+    (CAN_MOVE LOC17 LOC22)
+    (CAN_MOVE LOC22 LOC17)
+    (CAN_MOVE LOC18 LOC23)
+    (CAN_MOVE LOC23 LOC18)
+    (CAN_MOVE LOC4 LOC5)
+    (CAN_MOVE LOC5 LOC4)
+    (CAN_MOVE LOC6 LOC7)
+    (CAN_MOVE LOC7 LOC6)
+    (CAN_MOVE LOC9 LOC10)
+    (CAN_MOVE LOC10 LOC9)
+    (CAN_MOVE LOC11 LOC12)
+    (CAN_MOVE LOC12 LOC11)
+    (CAN_MOVE LOC12 LOC13)
+    (CAN_MOVE LOC13 LOC12)
+    (CAN_MOVE LOC13 LOC14)
+    (CAN_MOVE LOC14 LOC13)
+    (CAN_MOVE LOC14 LOC15)
+    (CAN_MOVE LOC15 LOC14)
+    (CAN_MOVE LOC16 LOC17)
+    (CAN_MOVE LOC17 LOC16)
+    (CAN_MOVE LOC17 LOC18)
+    (CAN_MOVE LOC18 LOC17)
+    (CAN_MOVE LOC18 LOC19)
+    (CAN_MOVE LOC19 LOC18)
+    (CAN_MOVE LOC19 LOC20)
+    (CAN_MOVE LOC20 LOC19)
+
+    ;; the initial locations of the agents
+    (AT AGENT1 LOC6)
+    (AT AGENT2 LOC2)
+  )
+
+  ;; setting goals
+  ((GO-TO-DESTINATION AGENT1 AGENT2 LOC8 LOC14))
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TEST CASES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;; under the assumption that agent1 starts from loc1 and agent2 from loc2 ;;;;;
+
+  ;; the initial locations of the agents
+  ; (AT AGENT1 LOC1)
+  ; (AT AGENT2 LOC2)
+
+  ;; case 1: both agents already are at their goal destination
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC1 LOC2))
+
+  ;; case 2: agent1 already is at its goal destination and agent2 can reach
+  ;; its goal destination in one valid move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC1 LOC7))
+
+  ;; case 3: agent1 already is at its goal destination and agent2 can reach
+  ;; its goal destination in more than valid move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC1 LOC6))
+
+  ;; case 4: agent1 can reach its goal destination in one valid move and agent2
+  ;; is already at its goal destination
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC6 LOC2))
+
+  ;; case 5: both agent1 and agent2 can reach their goal destination in one valid
+  ;; move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC6 LOC7))
+
+  ;; case 6: agent1 can reach their goal destination in one valid move and agent2
+  ;; can reach its goal destination in more than one valid move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC6 LOC6))
+
+  ;; case 7: agent1 can reach its goal destination in more than one valid move
+  ;; and agent2 is already at its goal destination
+  ;; can reach its goal destination in more than one valid move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC7 LOC2))
+
+  ;; case 8: agent1 can reach its goal destination in more than one valid move
+  ;; and agent2 can reach its goal destination in a single move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC7 LOC6))
+
+  ;; case 9: both agent1 and agent2 can reach their goal destination in more
+  ;; than one valid move
+  ; ((GO-TO-DESTINATION AGENT1 AGENT2 LOC7 LOC7))
+)
+
