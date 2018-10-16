@@ -31,8 +31,22 @@ def vertex_path_to_edge_path(vertex_path):
 
     return edge_path
 
+def unique(elements):
+    uniq = {}
+    for el in elements:
+        if el in uniq:
+            uniq[el] += 1
+        else:
+            uniq[el] = 1
+    keys = []
+    counts = []
+    for k in uniq.keys():
+        keys.append(k)
+        counts.append(uniq[k])
+    return keys, counts
 
-def plot_graph_paths(graph, paths=[], colors=[]):
+
+def plot_graph_paths(graph, paths=[]):
     # nx.draw_spring(graph, with_labels=True)
 
     # ploting graph
@@ -44,17 +58,17 @@ def plot_graph_paths(graph, paths=[], colors=[]):
 
     labeldict = {node: node for node in graph.nodes()}
 
-    for i in range(len(paths)):
-        labeldict[paths[i][0][0]] += ", start"
-
-        labeldict[paths[i][-1][1]] += ", goal"
+    # for i in range(len(paths)):
+    #     labeldict[paths[i][0][0]] += ", start"
+    #
+    #     labeldict[paths[i][-1][1]] += ", goal"
 
     nx.draw_networkx_labels(graph, pos=pos, labels=labeldict)
     nx.draw_networkx_edges(graph, pos=pos)
 
+    all_edges = [i for j in paths for i in j]
+    unique_edges, counts = unique(all_edges)
     # adding paths
-    for i in range(len(paths)):
-        nx.draw_networkx_edges(graph, pos=pos, edgelist=paths[i],
-                               width=5 + 1.5 * (len(paths) - i))
 
+    nx.draw_networkx_edges(graph, pos=pos, edgelist=unique_edges, width=counts)
     plt.show()
