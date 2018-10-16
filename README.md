@@ -45,9 +45,14 @@ More information on additional algorithms and parameters are available on the we
 
 
 ### JSHOP2
-The relevant code for the JSHOP2 implementation of the route planning problem can be found in the following two files:
-  - /jshop2-master/examples/routeplanning/problem
-  - /jshop2-master/examples/routeplanning/routeplanning
+There are two implementations in JSHOP2: decoupled route planning and coupled route planning.
+The relevant code for the decoupled implementation can be found in the following two files:
+  - /jshop2-master/routeplanning_decoupled/problem
+  - /jshop2-master/routeplanning_decoupled/routeplanning
+
+The relevant code for the coupled implementation can be found in the following two files:
+  - /jshop2-master/routeplanning_coupled/problem
+  - /jshop2-master/routeplanning_coupled/routeplanning
 
 To run the code at your end:
   1. $ export CLASSPATH=~'pwd'/jshop2-master/antlr.jar:~'pwd'/jshop2-master/bin.build/JSHOP2.jar:.
@@ -55,8 +60,11 @@ To run the code at your end:
   To compile all files
   2. $ make c
 
-  To start the GUI/solver for the route-planning problem
-  3. $ make 9
+  To start the GUI/solver for the decoupled route-planning approach
+  3.1. $ make 1
+
+  To start the GUI/solver for the decoupled route-planning approach
+  3.2. $ make 2
 
 
 ### SIMULATED ANNEALING

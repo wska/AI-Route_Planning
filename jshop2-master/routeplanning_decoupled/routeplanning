@@ -1,0 +1,94 @@
+;;;; AI project: multi-agent routeplanning domain definition in JSHOP2
+;;;; using a decoupled approach
+
+;;;; Authors:
+;;;; - Adrian Chmielewski-Anders
+;;;; - Alex Mellado
+;;;; - Daniel Skantz
+;;;; - William Skägerstrom
+;;;; - Bas Straathof
+
+
+(defdomain routeplanning
+  (
+    (:operator
+      ;; define a valid move
+      (!move-to ?agent ?from ?to)
+
+      ; preconditions
+      ((agent ?agent)
+       (location ?from)
+       (location ?to)
+       (can_move ?from ?to)
+       (at ?agent ?from)
+      )
+
+      ; delete list
+      ((at ?agent ?from))
+
+      ; add list
+      ((at ?agent ?to))
+    )
+
+    (:operator
+      ;; add a location to list of visited nodes
+      (!visit ?location)
+      ()
+      ()
+      ((visited ?location))
+    )
+
+    (:operator
+      ;; delete a location to list of visited nodes
+      (!unvisit ?location)
+      ()
+      ((visited ?location))
+      ()
+    )
+
+    (:method
+      ;; move agent to a node
+      (move-to ?agent ?to)
+      ((at ?agent ?from))
+      ((!visit ?from)
+       (move-to ?agent ?from ?to)
+       (!unvisit ?from)
+      )
+    )
+
+    (:method
+      ;; move agent from node a to node b
+      (move-to ?agent ?from ?to)
+
+      case1-agent-already-at-location
+      ((at ?agent ?to))
+      ()
+
+      case2-agent-can-move-to-destination-from-current-location
+      ((can_move ?from ?to))
+      ((!move-to ?agent ?from ?to))
+
+      case3-agent-can-move-from-current-location-to-non-final-location
+      ((location ?mid)
+        ;; mid has to be a valid node
+        (can_move ?from ?mid)
+        (not (visited ?mid))
+      )
+      ((!move-to ?agent ?from ?mid)
+        (!visit ?mid)
+        (move-to ?agent ?mid ?to)
+        (!unvisit ?mid)
+      )
+    )
+
+    (:method
+      ;; goal method
+      (go-to-destination ?agent ?location)
+      ((location ?location)
+       (agent ?agent)
+      )
+      ((move-to ?agent ?location))
+    )
+  )
+)
+
