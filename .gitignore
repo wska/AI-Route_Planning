@@ -6,3 +6,4 @@ jshop2-master/classpath.sh
 output.sas
 sas_plan
 */__pycache__
+.vscode
