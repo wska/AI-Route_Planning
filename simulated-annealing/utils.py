@@ -3,6 +3,7 @@ import os
 import constants as ct
 import csv
 import pylab as plt
+from math import sqrt
 
 
 def read_graph(path_graph, path_init):
@@ -27,9 +28,11 @@ def read_graph(path_graph, path_init):
 
 
 def vertex_path_to_edge_path(vertex_path):
-    edge_path = [(vertex_path[i], vertex_path[i + 1]) for i in range(len(vertex_path) - 1)]
+    edge_path = [(vertex_path[i], vertex_path[i + 1]) for i in
+                 range(len(vertex_path) - 1)]
 
     return edge_path
+
 
 def unique(elements):
     uniq = {}
@@ -46,12 +49,23 @@ def unique(elements):
     return keys, counts
 
 
+def absolute_node_positions(low, up):
+    node_pos_map = {}
+    nodes = range(low, up + 1)
+    dim = int(sqrt(up))
+    for node in nodes:
+        node_pos_map[str(node)] = [(node - 1) % dim, dim - ((node-1) // dim)]
+    return node_pos_map
+
+
 def plot_graph_paths(graph, paths=[]):
     # nx.draw_spring(graph, with_labels=True)
 
     # ploting graph
 
-    pos = nx.spring_layout(graph)
+    # pos = nx.spring_layout(graph)
+    plt.figure()
+    pos = absolute_node_positions(1, 25)
     nx.draw_networkx_nodes(graph, pos=pos)
 
     # Adding goal-start
@@ -71,4 +85,3 @@ def plot_graph_paths(graph, paths=[]):
     # adding paths
 
     nx.draw_networkx_edges(graph, pos=pos, edgelist=unique_edges, width=counts)
-    plt.show()

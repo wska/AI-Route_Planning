@@ -104,7 +104,7 @@ def main():
 
     init_paths = initial_guess(init_states, graph)
     prob = PathsProblem(init_paths, graph)
-    prob.steps = 3000
+    prob.steps = 10000
 
     state, e = prob.anneal()
 
@@ -121,6 +121,7 @@ def main():
     utils.plot_graph_paths(graph, paths=init_paths)
     utils.plot_graph_paths(graph, paths=state)
 
+    plt.show()
 
 if __name__ == '__main__':
     main()
