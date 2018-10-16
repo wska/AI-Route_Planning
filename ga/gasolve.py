@@ -5,13 +5,11 @@ import matplotlib.pyplot as plt
 import os
 from random import randint
 import random
-import pandas as pd
-import operator
 import datetime
 import constants as ct
 import utils
 
-
+# Used to calculate the additional penalty for congestion, defined by multiple agents positioning themselves on the same edge.
 def congestion_cost(n):
     """
     Piecewise function which is linear until n=2, then quadratic, then
@@ -28,7 +26,7 @@ def congestion_cost(n):
     else:
         return log10(n) * 50
 
-
+# Calculates the collective cost of a state given all the agent paths.
 def collective_cost(graph, agents_paths):
     total_cost = 0
 
@@ -45,22 +43,17 @@ def collective_cost(graph, agents_paths):
     return total_cost
 
 
-
+# Creates a population of samples(states) given the initial states. A single sample is a state containing the movement of all agents. 
 def create_population(init_states, graph, popsize):
         pathDict = {}
 
         for start,goal in init_states:
             pathDict[(start,goal)] = []
             for path in nx.all_simple_paths(graph, source=start, target=goal):
-                #print(path)
                 pathDict[(start,goal)].append(path)
 
-
-        #return pathDict
         population = []
-        #keys = pathDict.keys()
         
-
         for _ in range(0,popsize):
             sample = []
             for start,goal in init_states:
@@ -71,23 +64,19 @@ def create_population(init_states, graph, popsize):
         return population
 
 
+# Samples a number of samples equal to selectionsize from the populationpaths, which is a list of tuples with (state, cost).
+# Returns the best one(defined by the lowest associated cost).
 def selection(populationPaths, graph, selectionsize):
-    #selection = []
-    #df = pd.DataFrame(np.array(populationPaths), columns=["Index", "Fitness"])
-    #df["Score"] = df.collective_cost.cumsum()
-    #df["%"] = 100*df.score/df.collective_cost.sum()
     populationPaths = random.sample(populationPaths, selectionsize)
     
     rankings = []
     for pathSet in populationPaths:
-        #print(pathSet)
         rankings.append((pathSet, collective_cost(graph, pathSet)))
     
-    #rankings.sort(key=lambda x:x[1])
     
     return min(rankings, key=lambda x:x[1])
 
-
+# Converts a node problem to an edge problem
 def makeEdgeProblem(populationPaths):
     popEdges = []
     for pathSet in populationPaths:
@@ -100,6 +89,8 @@ def makeEdgeProblem(populationPaths):
    
     return popEdges
 
+# Takes a number of parents and splices them into a new set of states. The splicing is done by randomly selecting a gene from any parent into the new one. 
+# Returns a new number of states equal to the size of gensize.
 def next_generation(parents, graph, gensize):
     newGeneration = []
     for _ in range(gensize):
@@ -113,37 +104,33 @@ def next_generation(parents, graph, gensize):
 
 
 def main():
-
     startTime = datetime.datetime.now()
-    initialPopulationSize = 100
-    numberOfParents = 5
-    iterations = 30
+    initialPopulationSize = 100  # Determines the initial sample size of the search space.
+    numberOfParents = 5 # Determines how many parents are selected to create a new generation.
+    iterations = 30 # The number of generations that are created before terminating. 
 
 
     graph, init_states = utils.read_graph(os.getcwd() + ct.EDGE_LIST_PATH, os.getcwd() + ct.INITIAL_STATE_PATH)
     
 
-    populationPaths = create_population(init_states, graph, initialPopulationSize)
-    populationPaths = makeEdgeProblem(populationPaths)
-    savedOriginalPaths = populationPaths
+    populationPaths = create_population(init_states, graph, initialPopulationSize) # Creates the initial population
+    populationPaths = makeEdgeProblem(populationPaths) # Converts the problem into an edge problem
+    savedOriginalPaths = populationPaths # Saves the best state for comparison later
 
 
-    for i in range(0,iterations):
+    for i in range(0,iterations): # Iterates the process of creating a new generation, starting from the random sampled initial population
         print("Starting iteration" + str(i+1))
         parents = []
         for _ in range(numberOfParents):
             parent = selection(populationPaths, graph, int(round(initialPopulationSize/2)))
-            #print(parent)
             parents.append(parent[0])
 
-        #print(parents)
         populationPaths = next_generation(parents, graph, initialPopulationSize)
     
 
     output = selection(populationPaths, graph, initialPopulationSize)
     endTime = datetime.datetime.now() - startTime
 
-    #print(len(output[0]))
     for i in range(0,len(output[0])):
         print("Agent"+str(i+1)+'\'s path: ' + str(output[0][i]))
     print("Total cost: " + str(output[1]))
