@@ -9,20 +9,19 @@
 ;;;; - Bas Straathof
 
 
-
 (define (domain path)
   (:requirements :action-costs)
   (:predicates
-   (node ?n)         ; Vertices/locations
-   (agent ?a)        ; Agents
-   (at ?a ?n)        ; Agent 'a' at location 'n'
-   (canTravel ?n ?n) ; If there exists an edge between two nodes
+   (location ?n)         ; vertices/locations
+   (agent ?a)        ; agents
+   (at ?a ?n)        ; agent 'a' at location 'n'
+   (can_move ?n ?n) ; if there exists an edge between two locations
   )
 
 
   (:functions
-    ; Find the given cost between two nodes
-    (travelCost ?n ?n)
+    ; Find the given cost between two locations
+    (cost ?n ?n)
 
     ; Keep track of the total cost of a path
     (total-cost)
@@ -36,17 +35,17 @@
     ;; the action to the total cost.
     :parameters  (?a ?from ?to)
     :precondition (and
-      (node ?from)
-      (node ?to)
+      (location ?from)
+      (location ?to)
       (agent ?a)
       (at ?a ?from)
-      (canTravel ?from ?to)
+      (can_move ?from ?to)
     )
 
     :effect (and
       (at ?a ?to)
       (not (at ?a ?from))
-      (increase (total-cost) (travelCost ?from ?to))
+      (increase (total-cost) (cost ?from ?to))
     )
   )
 
@@ -56,16 +55,16 @@
    ;; the action to the total cost.
   :parameters  (?a ?from ?to)
   :precondition (and
-    (node ?from)
-    (node ?to)
+    (location ?from)
+    (location ?to)
     (agent ?a)
     (at ?a ?from)
-    (canTravel ?to ?from)
+    (can_move ?to ?from)
   )
   :effect (and
     (at ?a ?to)
     (not (at ?a ?from))
-    (increase (total-cost) (travelCost ?to ?from))
+    (increase (total-cost) (cost ?to ?from))
     )
   )
 )
