@@ -68,3 +68,18 @@ To run the code at your end:
 
 
 ### SIMULATED ANNEALING
+
+### GENETIC ALGORITHM
+#Instructions for the genetic algorithm
+
+The genetic algorithm only requres a set of python modules to be installed.
+The following modules need to be available on the running computer:
+* simanneal
+* networkx
+* matplotlib + pyplot
+
+
+To run the genetic algorithm:
+1. (OPTIONAL) Specify the problem setting to be used. The problem files can be located in graph/
+2. (OPTIONAL) Adjust the hyperparameters of gasolve.py. The parameters can be found in the main function.
+3. python3 ga/gasolve.py
