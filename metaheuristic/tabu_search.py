@@ -1,4 +1,3 @@
-
 from copy import deepcopy
 import numpy as np
 import networkx as nx
@@ -8,11 +7,11 @@ import constants as ct
 import utils
 from matplotlib import pyplot as plt
 
-MAX_CONT = 100
+MAX_CONT = 60
 MAX_LEN_TABU = 20
 
-def tabu_search(graph, init_state):
 
+def tabu_search(graph, init_state):
     hist = list()
 
     state = init_state
@@ -24,7 +23,7 @@ def tabu_search(graph, init_state):
     while True and cont < MAX_CONT:
 
         if cont % 10 == 0:
-            print ("step = " + str(cont))
+            print("step = " + str(cont))
         nbs = neighbors(graph, state)
         nb_min = None
         nb_min_cost = np.inf
@@ -33,6 +32,8 @@ def tabu_search(graph, init_state):
 
             nb_cost = utils.collective_cost(graph, nb)
 
+            # aspiration
+            # if (nb not in tabu_list or nb_cost < best_ever_candidate_cost) and nb_cost < nb_min_cost:
             if nb not in tabu_list and nb_cost < nb_min_cost:
                 nb_min = nb
                 nb_min_cost = nb_cost
@@ -51,9 +52,7 @@ def tabu_search(graph, init_state):
 
         hist.append(best_ever_candidate_cost)
 
-
     return best_ever_candidate, best_ever_candidate_cost, hist
-
 
 
 def get_perturbations(graph, path):
@@ -72,7 +71,7 @@ def get_perturbations(graph, path):
             if edge not in edge_path:
                 candidate_paths.append(edge_path + path[idx + 1:])
 
-    candidate_paths = sorted(candidate_paths, key = len)
+    candidate_paths = sorted(candidate_paths, key=len)
 
     return [p for p in candidate_paths if len(p) == len(candidate_paths[0])]
 
@@ -95,10 +94,10 @@ def neighbors(graph, state):
 
 
 def main():
-    graph, init_states = utils.read_graph(os.getcwd() + ct.EDGE_LIST_PATH, os.getcwd() + ct.INITIAL_STATE_PATH)
+    graph, init_states = utils.read_graph(os.getcwd() + ct.EDGE_LIST_PATH,
+                                          os.getcwd() + ct.INITIAL_STATE_PATH)
 
     init_paths = utils.initial_guess(init_states, graph)
-
 
     print('Original ')
     for path in init_paths:
@@ -112,9 +111,9 @@ def main():
         print(path)
     print(cost)
 
-    # utils.plot_graph_paths(graph, paths=init_paths)
-    # utils.plot_graph_paths(graph, paths=state)
-
+    utils.plot_graph_paths_max(graph, paths=init_paths, title='Individual Planning')
+    utils.plot_graph_paths_max(graph, paths=state, title='Tabu Search Cooperative Planning')
+    plt.show()
     x = range(len(hist))
 
     plt.plot(x, hist)

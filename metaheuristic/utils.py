@@ -55,7 +55,7 @@ def absolute_node_positions(low, up):
     nodes = range(low, up + 1)
     dim = int(sqrt(up))
     for node in nodes:
-        node_pos_map[str(node)] = [(node - 1) % dim, dim - ((node-1) // dim)]
+        node_pos_map[str(node)] = [(node - 1) % dim, dim - ((node - 1) // dim)]
     return node_pos_map
 
 
@@ -88,6 +88,37 @@ def plot_graph_paths(graph, paths=[]):
     nx.draw_networkx_edges(graph, pos=pos, edgelist=unique_edges, width=counts)
 
 
+def plot_graph_paths_max(graph, paths=None, title=''):
+    plt.figure()
+    pos = absolute_node_positions(1, 25)
+    nx.draw_networkx_nodes(graph, pos=pos)
+
+    labeldict = {node: node for node in graph.nodes()}
+    nx.draw_networkx_labels(graph, pos=pos, labels=labeldict)
+    nx.draw_networkx_edges(graph, pos=pos)
+
+    if paths is None:
+        return
+
+    all_edges = [i for j in paths for i in j]
+
+    unique_edges, _ = unique(all_edges)
+
+    T = max(map(len, paths))
+    E = unique_edges
+    edge_weights = {e: 0 for e in E}
+
+    for t in range(T):
+        for e in E:
+            n = 0
+            for p in paths:
+                if t < len(p) and p[t] == e:
+                    n += 1
+            edge_weights[e] = max(edge_weights[e], n)
+
+    max_counts = [edge_weights[e] for e in E]
+    nx.draw_networkx_edges(graph, pos=pos, edgelist=E, width=max_counts)
+    plt.title(title)
 
 
 def congestion_cost(n):
@@ -121,7 +152,6 @@ def collective_cost(graph, agents_paths):
                     num_agents_on_edge += 1
             total_cost += congestion_cost(num_agents_on_edge)
     return total_cost
-
 
 
 # give an initial set of paths for each agent

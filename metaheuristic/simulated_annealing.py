@@ -35,12 +35,12 @@ class PathsProblem(Annealer):
 
     def energy(self):
 
-        self.temperatures.append(self.Tmax * math.exp(self.Tfactor * len(self.energies) / self.steps))
+        self.temperatures.append(self.Tmax * math.exp(
+            self.Tfactor * len(self.energies) / self.steps))
 
         ener = utils.collective_cost(self.graph, self.state)
 
         self.energies.append(ener)
-
 
         return ener
 
@@ -58,11 +58,9 @@ class PathsProblem(Annealer):
         super(PathsProblem, self).__init__(state)
 
 
-
 def main():
-
-
-    graph, init_states = utils.read_graph(os.getcwd() + ct.EDGE_LIST_PATH, os.getcwd() + ct.INITIAL_STATE_PATH)
+    graph, init_states = utils.read_graph(os.getcwd() + ct.EDGE_LIST_PATH,
+                                          os.getcwd() + ct.INITIAL_STATE_PATH)
 
     init_paths = utils.initial_guess(init_states, graph)
     prob = PathsProblem(init_paths, graph)
@@ -80,9 +78,10 @@ def main():
     for path in state:
         print(path)
     print(e)
-    #
-    # utils.plot_graph_paths(graph, paths=init_paths)
-    # utils.plot_graph_paths(graph, paths=state)
+
+    utils.plot_graph_paths_max(graph, paths=init_paths)
+    utils.plot_graph_paths_max(graph, paths=state)
+    plt.show()
 
     x = np.array(range(len(prob.energies)))
     y = np.array(prob.energies)
@@ -91,10 +90,8 @@ def main():
     plt.xlabel("Step")
     plt.ylabel("Cost function")
 
-
-
-
     plt.show()
+
 
 if __name__ == '__main__':
     main()
