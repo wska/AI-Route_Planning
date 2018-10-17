@@ -1,21 +1,23 @@
+#!/usr/bin/python3
+
 from simanneal import Annealer
 import networkx as nx
-import matplotlib.pyplot as plt
 import os
 from random import randint
-
 import numpy as np
+import math
+import matplotlib.pyplot as plt
 
 import constants as ct
 import utils
-import math
 
 
 # This is the problem we are solving
 class PathsProblem(Annealer):
     def move(self):
-        # we may have to try multiple times if an edge can or cannot be removed
-        # we give it a maximum number of tries and if it can't change the graph then it just won't
+        """We may have to try multiple times if an edge can or cannot be removed
+        we give it a maximum number of tries and if it can't change the graph
+        then it just won't"""
         for i in range(20):
             agent_idx = randint(0, len(self.state) - 1)
             agent = self.state[agent_idx]
@@ -33,8 +35,9 @@ class PathsProblem(Annealer):
                     self.state[agent_idx] = edge_path + agent[idx + 1:]
                     return
 
-    def energy(self):
 
+    def energy(self):
+        """"""
         self.temperatures.append(self.Tmax * math.exp(
             self.Tfactor * len(self.energies) / self.steps))
 
@@ -44,13 +47,16 @@ class PathsProblem(Annealer):
 
         return ener
 
+
     def __init__(self, state, graph):
         """
-        :param state: Is a list of lists, each list represents a path for a single agent, it changes
+        :param state: Is a list of lists, each list represents a path for a
+        single agent, it changes
         [
             [(a, b), (b, c), (c, f) ... (.., z)]
         ]
-        :param graph: Is the graph/map it is a NetworkX graph object instance it doesn't change.
+        :param graph: Is the graph/map it is a NetworkX graph object instance it
+        doesn't change.
         """
         self.graph = graph
         self.temperatures = list()
@@ -59,6 +65,12 @@ class PathsProblem(Annealer):
 
 
 def simulate_annealing(graph, init_states):
+    """
+    Function to run simulated annealing.
+    :param graph:
+    :param init_states:
+    :return:
+    """
     prob = PathsProblem(init_states, graph)
     prob.steps = 20000
     prob.Tfactor = -math.log(prob.Tmax / prob.Tmin)
@@ -101,3 +113,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

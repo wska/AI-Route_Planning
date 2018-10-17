@@ -9,8 +9,7 @@ from math import sqrt
 
 def read_graph(path_graph, path_init):
     """
-
-    :param path_graph: None
+    :param path_graph:
     :param path_init:
     :return:
     """
@@ -22,13 +21,17 @@ def read_graph(path_graph, path_init):
         init_states = list(tuple(rec) for rec in csv.reader(f, delimiter=' '))
 
     # transform the nodes from string to unicode, the format that use networkx
-
-    # init_states = [(agent[0].decode('unicode-escape'), agent[1].decode('unicode-escape')) for agent in init_states]
+    # init_states = [(agent[0].decode('unicode-escape'),
+    #                 agent[1].decode('unicode-escape')) for agent in init_states]
 
     return graph, init_states
 
 
 def vertex_path_to_edge_path(vertex_path):
+    """
+    :param vertex_path:
+    :return:
+    """
     edge_path = [(vertex_path[i], vertex_path[i + 1]) for i in
                  range(len(vertex_path) - 1)]
 
@@ -36,6 +39,10 @@ def vertex_path_to_edge_path(vertex_path):
 
 
 def unique(elements):
+    """
+    :param unique:
+    :return:
+    """
     uniq = {}
     for el in elements:
         if el in uniq:
@@ -51,6 +58,11 @@ def unique(elements):
 
 
 def absolute_node_positions(low, up):
+    """
+    :param low:
+    :param up:
+    :return:
+    """
     node_pos_map = {}
     nodes = range(low, up + 1)
     dim = int(sqrt(up))
@@ -60,17 +72,18 @@ def absolute_node_positions(low, up):
 
 
 def plot_graph_paths(graph, paths=[]):
+    """
+    :param graph:
+    :return:
+    """
     # nx.draw_spring(graph, with_labels=True)
-
     # ploting graph
-
     # pos = nx.spring_layout(graph)
     plt.figure()
     pos = absolute_node_positions(1, 25)
     nx.draw_networkx_nodes(graph, pos=pos)
 
     # Adding goal-start
-
     labeldict = {node: node for node in graph.nodes()}
 
     # for i in range(len(paths)):
@@ -89,6 +102,10 @@ def plot_graph_paths(graph, paths=[]):
 
 
 def plot_graph_paths_max(graph, paths=None, title=''):
+    """
+    :param graph:
+    :return:
+    """
     plt.figure()
     pos = absolute_node_positions(1, 25)
     nx.draw_networkx_nodes(graph, pos=pos)
@@ -139,6 +156,11 @@ def congestion_cost(n):
 
 
 def collective_cost(graph, agents_paths):
+    """
+    :param graph:
+    :param agents_paths:
+    :return:
+    """
     total_cost = 0
 
     edge_pool = set([link for agent in agents_paths for link in agent])
@@ -157,10 +179,9 @@ def collective_cost(graph, agents_paths):
 # give an initial set of paths for each agent
 def initial_guess(init_states, graph):
     """
-
     :param init_states: [(init_node, goal_node), ..., (init_node, goal_node)]
-    :param graph:
-    :return:
+    :param graph: networkX graph
+    :return: list of paths
     """
     init_paths = []
 

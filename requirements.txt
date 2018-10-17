@@ -2,3 +2,5 @@ networkx
 simanneal
 matplotlib
 numpy
+random
+argparse

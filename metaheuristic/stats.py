@@ -1,18 +1,17 @@
+#!/usr/bin/python3
+
 from datetime import datetime
-import utils
-import constants as ct
 import os
 from copy import deepcopy as dup
+import numpy as np
 from tabu_search import tabu_search
 from simulated_annealing import simulate_annealing
 from gasolve import ga_solve
-import numpy as np
-
+import utils
+import constants as ct
 
 def main(fun, trials=8):
     """
-
-    :param trials:
     :param fun: a function which should take 2 arguments
         1. graph
         2. init_states (i.e. the paths) [[..], [..], ..]
@@ -20,6 +19,7 @@ def main(fun, trials=8):
         And it should solve the problem and return a tuple
         (solution_paths, cost)
         see tabu_search for an example
+    :param trials:
     :return:
     """
     graph, init_states = utils.read_graph(os.getcwd() + ct.EDGE_LIST_PATH,
@@ -29,6 +29,7 @@ def main(fun, trials=8):
 
     times = []
     costs = []
+
     # no use for this rn, but maybe it'll have a use later on? for visualization
     # or something...
     solutions = []
@@ -57,3 +58,4 @@ def main(fun, trials=8):
 
 if __name__ == '__main__':
     main(simulate_annealing)
+

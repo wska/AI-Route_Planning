@@ -1,9 +1,16 @@
+#!/usr/bin/python3
+
 import argparse
 from sys import argv
 from random import randint
 
 
 def parse_args(args):
+    """
+    Parses arguments to generate trips
+    :param args:
+    :return:
+    """
     parser = argparse.ArgumentParser(
         description='Generate some random trips'
     )
@@ -28,3 +35,4 @@ def main(args):
 
 if __name__ == '__main__':
     main(parse_args(argv))
+

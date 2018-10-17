@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from copy import deepcopy
 import numpy as np
 import networkx as nx
@@ -12,6 +14,16 @@ MAX_LEN_TABU = 20
 
 
 def tabu_search(graph, init_state):
+    """
+    For given graph and inite_state (set of starting paths)
+    find a better set of paths using Tabu search
+
+    :param graph: a networkX graph
+    :param init_state: a list of lists, in which each list is a set of tuples
+    :return: a lists of a list of lists, in which each list is a set of tuples
+             cost of the return path set
+    """
+
     hist = list()
 
     state = init_state
@@ -20,8 +32,8 @@ def tabu_search(graph, init_state):
     best_ever_candidate_cost = np.inf
     best_ever_candidate = None
     cont = 0
-    while True and cont < MAX_CONT:
 
+    while True and cont < MAX_CONT:
         if cont % 10 == 0:
             print("step = " + str(cont))
         nbs = neighbors(graph, state)
@@ -33,7 +45,8 @@ def tabu_search(graph, init_state):
             nb_cost = utils.collective_cost(graph, nb)
 
             # aspiration
-            # if (nb not in tabu_list or nb_cost < best_ever_candidate_cost) and nb_cost < nb_min_cost:
+            # if (nb not in tabu_list or nb_cost < best_ever_candidate_cost) and
+            # nb_cost < nb_min_cost:
             if nb not in tabu_list and nb_cost < nb_min_cost:
                 nb_min = nb
                 nb_min_cost = nb_cost
@@ -56,6 +69,12 @@ def tabu_search(graph, init_state):
 
 
 def get_perturbations(graph, path):
+    """
+    :param graph: networkX graph
+    :param path: list of edges, in which an edge is a tuple of strings
+
+    :return: a list of paths, which are perturbations of the current path
+    """
     candidate_paths = list()
 
     for idx in range(len(path)):
@@ -77,6 +96,15 @@ def get_perturbations(graph, path):
 
 
 def neighbors(graph, state):
+    """
+    Finds all neighbors in a state
+
+    :param graph: a networkX graph
+    :param state: list of lists where each lists is a path
+
+    :return: a list of lists of lists, i.e. a list of all the states that
+             could be reached from the current state
+    """
     all_neighbors = list()
 
     for i in range(len(state)):
@@ -126,3 +154,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
