@@ -58,16 +58,22 @@ class PathsProblem(Annealer):
         super(PathsProblem, self).__init__(state)
 
 
+def simulate_annealing(graph, init_states):
+    prob = PathsProblem(init_states, graph)
+    prob.steps = 20000
+    prob.Tfactor = -math.log(prob.Tmax / prob.Tmin)
+
+    state, e = prob.anneal()
+    return state, e, prob
+
+
 def main():
     graph, init_states = utils.read_graph(os.getcwd() + ct.EDGE_LIST_PATH,
                                           os.getcwd() + ct.INITIAL_STATE_PATH)
 
     init_paths = utils.initial_guess(init_states, graph)
-    prob = PathsProblem(init_paths, graph)
-    prob.steps = 20000
-    prob.Tfactor = -math.log(prob.Tmax / prob.Tmin)
 
-    state, e = prob.anneal()
+    state, e, prob = simulate_annealing(graph, init_paths)
 
     print('Original ')
     for path in init_paths:

@@ -69,8 +69,6 @@ To start the GUI/solver for the decoupled route-planning approach, do:
   3.2. $ make 2
 
 
-### SIMULATED ANNEALING
-
 ### GENETIC ALGORITHM
 #Instructions for the genetic algorithm
 
@@ -85,3 +83,32 @@ To run the genetic algorithm:
 1. (OPTIONAL) Specify the problem setting to be used. The problem files can be located in graph/
 2. (OPTIONAL) Adjust the hyperparameters of gasolve.py. The parameters can be found in the main function.
 3. python3 ga/gasolve.py
+
+### SIMULATED ANNEALING
+You may run the simulated annealing solver with
+`python3 metaheuristic/simulated_annealing.py`
+Ensure you've run `pip install -r requirements.txt` beforehand.
+
+The script will also generate some plots.
+The default graph that is read is `constants.EDGE_LIST_PATH`
+and the default start/end positions are `constants.INITIAL_STATE_PATH`
+
+The above (regarding start/end points and selected graph) holds for
+Tabu search as well as `stats.py`
+
+### Tabu Search
+You may run the tabu search solver with
+`python3 metaheuristic/tabu_search.py`
+
+
+### Repeated Trials
+There is a Python script `metaheuristic/stats.py` which is useful for
+running a solver a bunch of times and recording some statistics.
+
+Just change the function in `main` to be the solver of your choice for evaluation.
+
+### Generating a trip file
+You can generate your own trips and use this to run the solvers.
+You should look into `gen_trips.py`, located in the root of the project.
+The only required argument is `-o fname` where `fname` is the path to
+put the trip file 

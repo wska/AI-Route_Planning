@@ -102,6 +102,24 @@ def next_generation(parents, graph, gensize):
     return newGeneration
 
 
+def ga_solve(graph, init_paths, initialPopulationSize=100, numberOfParents=5, iterations=30):
+
+    init_states = [(path[0][0], path[-1][1]) for path in init_paths]
+    populationPaths = create_population(init_states, graph, initialPopulationSize)  # Creates the initial population
+    populationPaths = makeEdgeProblem(populationPaths)  # Converts the problem into an edge problem
+    savedOriginalPaths = populationPaths  # Saves the best state for comparison later
+
+    for i in range(0, iterations):  # Iterates the process of creating a new generation, starting from the random sampled initial population
+        print("Starting iteration" + str(i + 1))
+        parents = []
+        for _ in range(numberOfParents):
+            parent = selection(populationPaths, graph,
+                               int(round(initialPopulationSize / 2)))
+            parents.append(parent[0])
+
+        populationPaths = next_generation(parents, graph, initialPopulationSize)
+
+    return selection(populationPaths, graph, initialPopulationSize)
 
 def main():
     startTime = datetime.datetime.now()

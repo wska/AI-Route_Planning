@@ -4,10 +4,12 @@ import constants as ct
 import os
 from copy import deepcopy as dup
 from tabu_search import tabu_search
+from simulated_annealing import simulate_annealing
+from gasolve import ga_solve
 import numpy as np
 
 
-def main(fun, trials=2):
+def main(fun, trials=8):
     """
 
     :param trials:
@@ -40,7 +42,7 @@ def main(fun, trials=2):
         solution = res[0]
         cost = res[1]
         end_time = datetime.now()
-        times.append((end_time - start_time).microseconds / 1000)
+        times.append((end_time - start_time).seconds * 1000)
         costs.append(cost)
         solutions.append(solution)
 
@@ -54,4 +56,4 @@ def main(fun, trials=2):
 
 
 if __name__ == '__main__':
-    main(tabu_search)
+    main(simulate_annealing)
