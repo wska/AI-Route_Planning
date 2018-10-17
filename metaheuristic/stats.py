@@ -40,7 +40,7 @@ def main(fun, trials=2):
         solution = res[0]
         cost = res[1]
         end_time = datetime.now()
-        times.append(end_time - start_time)
+        times.append((end_time - start_time).microseconds / 1000)
         costs.append(cost)
         solutions.append(solution)
 
