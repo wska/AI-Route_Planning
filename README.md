@@ -45,25 +45,27 @@ More information on additional algorithms and parameters are available on the we
 
 
 ### JSHOP2
+To install JSHOP2, visit https://github.com/mas-group/jshop2 and download the .zip file.
+Make sure that Java is installed fully on your computer.
+Unzip the JSHOP .zip file in any directory and set the classpath as follows:
+   $ export CLASSPATH=~'pwd'/jshop2-master/antlr.jar:~'pwd'/jshop2-master/bin.build/JSHOP2.jar:.
+   
+Now move the following directories and files to your local jshop2-master/ directory:
+  - routeplanning_decoupled/
+  - routeplanning_decoupled/
+  - routeplanning_coupled/
+  - routeplanning_coupled/
+  - Makefile (overwrite the old Makefile)
+  
+To compile all files, run the following command:
+   $ make c
+
+
 There are two implementations in JSHOP2: decoupled route planning and coupled route planning.
-The relevant code for the decoupled implementation can be found in the following two files:
-  - /jshop2-master/routeplanning_decoupled/problem
-  - /jshop2-master/routeplanning_decoupled/routeplanning
+To start the GUI/solver for the decoupled route-planning approach, do:
+   $ make 1
 
-The relevant code for the coupled implementation can be found in the following two files:
-  - /jshop2-master/routeplanning_coupled/problem
-  - /jshop2-master/routeplanning_coupled/routeplanning
-
-To run the code at your end:
-  1. $ export CLASSPATH=~'pwd'/jshop2-master/antlr.jar:~'pwd'/jshop2-master/bin.build/JSHOP2.jar:.
-
-  To compile all files
-  2. $ make c
-
-  To start the GUI/solver for the decoupled route-planning approach
-  3.1. $ make 1
-
-  To start the GUI/solver for the decoupled route-planning approach
+To start the GUI/solver for the decoupled route-planning approach, do:
   3.2. $ make 2
 
 
