@@ -83,8 +83,6 @@ To download the Python dependencies for the metaheuristic algorithsm, do:
 $ pip install -r requirements.txt
 
 ### GENETIC ALGORITHM
-#Instructions for the genetic algorithm
-
 The genetic algorithm only requres a set of python modules to be installed.
 The following modules need to be available on the running computer:
 * simanneal
