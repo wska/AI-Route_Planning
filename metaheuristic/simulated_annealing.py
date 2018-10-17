@@ -4,8 +4,11 @@ import matplotlib.pyplot as plt
 import os
 from random import randint
 
+import numpy as np
+
 import constants as ct
 import utils
+import math
 
 
 # This is the problem we are solving
@@ -31,7 +34,15 @@ class PathsProblem(Annealer):
                     return
 
     def energy(self):
-        return utils.collective_cost(self.graph, self.state)
+
+        self.temperatures.append(self.Tmax * math.exp(self.Tfactor * len(self.energies) / self.steps))
+
+        ener = utils.collective_cost(self.graph, self.state)
+
+        self.energies.append(ener)
+
+
+        return ener
 
     def __init__(self, state, graph):
         """
@@ -42,31 +53,46 @@ class PathsProblem(Annealer):
         :param graph: Is the graph/map it is a NetworkX graph object instance it doesn't change.
         """
         self.graph = graph
+        self.temperatures = list()
+        self.energies = list()
         super(PathsProblem, self).__init__(state)
 
 
 
 def main():
+
+
     graph, init_states = utils.read_graph(os.getcwd() + ct.EDGE_LIST_PATH, os.getcwd() + ct.INITIAL_STATE_PATH)
 
     init_paths = utils.initial_guess(init_states, graph)
     prob = PathsProblem(init_paths, graph)
-    prob.steps = 10000
+    prob.steps = 20000
+    prob.Tfactor = -math.log(prob.Tmax / prob.Tmin)
 
     state, e = prob.anneal()
 
     print('Original ')
     for path in init_paths:
         print(path)
-    print(collective_cost(graph, init_paths))
+    print(utils.collective_cost(graph, init_paths))
 
     print('Annealed')
     for path in state:
         print(path)
     print(e)
+    #
+    # utils.plot_graph_paths(graph, paths=init_paths)
+    # utils.plot_graph_paths(graph, paths=state)
 
-    utils.plot_graph_paths(graph, paths=init_paths)
-    utils.plot_graph_paths(graph, paths=state)
+    x = np.array(range(len(prob.energies)))
+    y = np.array(prob.energies)
+
+    plt.plot(x, y)
+    plt.xlabel("Step")
+    plt.ylabel("Cost function")
+
+
+
 
     plt.show()
 

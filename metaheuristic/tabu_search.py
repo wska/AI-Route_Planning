@@ -12,6 +12,9 @@ MAX_CONT = 100
 MAX_LEN_TABU = 20
 
 def tabu_search(graph, init_state):
+
+    hist = list()
+
     state = init_state
     tabu_list = [init_state]
 
@@ -46,8 +49,10 @@ def tabu_search(graph, init_state):
 
         cont += 1
 
+        hist.append(best_ever_candidate_cost)
 
-    return best_ever_candidate, best_ever_candidate_cost
+
+    return best_ever_candidate, best_ever_candidate_cost, hist
 
 
 
@@ -100,15 +105,22 @@ def main():
         print(path)
     print(utils.collective_cost(graph, init_paths))
 
-    state, cost = tabu_search(graph, init_paths)
+    state, cost, hist = tabu_search(graph, init_paths)
 
     print('Annealed')
     for path in state:
         print(path)
     print(cost)
 
-    utils.plot_graph_paths(graph, paths=init_paths)
-    utils.plot_graph_paths(graph, paths=state)
+    # utils.plot_graph_paths(graph, paths=init_paths)
+    # utils.plot_graph_paths(graph, paths=state)
+
+    x = range(len(hist))
+
+    plt.plot(x, hist)
+
+    plt.xlabel("Step")
+    plt.ylabel("Cost function")
 
     plt.show()
 
