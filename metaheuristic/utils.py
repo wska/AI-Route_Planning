@@ -9,9 +9,10 @@ from math import sqrt
 
 def read_graph(path_graph, path_init):
     """
-    :param path_graph:
-    :param path_init:
-    :return:
+    Read a graph and the trip file
+    :param path_graph: The path to the edge list graph representation
+    :param path_init: The path to the trip file
+    :return: a networkx graph object, a set of tuples representing trips
     """
 
     graph = nx.read_edgelist(path_graph)
@@ -29,6 +30,7 @@ def read_graph(path_graph, path_init):
 
 def vertex_path_to_edge_path(vertex_path):
     """
+    Convert a list of verties to a list of edges
     :param vertex_path:
     :return:
     """
@@ -59,9 +61,11 @@ def unique(elements):
 
 def absolute_node_positions(low, up):
     """
-    :param low:
-    :param up:
-    :return:
+    Get a dict of node-> (x, y) in the reverse cartesian plane i.e. the origin
+    is on the top left
+    :param low: lower bound (inclusive)
+    :param up: upper bound (inclusive)
+    :return: dict of node->(x, y)
     """
     node_pos_map = {}
     nodes = range(low, up + 1)
@@ -73,7 +77,8 @@ def absolute_node_positions(low, up):
 
 def plot_graph_paths(graph, paths=[]):
     """
-    :param graph:
+    :param graph: a networkx graph object
+    :param paths: the paths of all agents
     :return:
     """
     # nx.draw_spring(graph, with_labels=True)
@@ -103,8 +108,7 @@ def plot_graph_paths(graph, paths=[]):
 
 def plot_graph_paths_max(graph, paths=None, title=''):
     """
-    :param graph:
-    :return:
+    :param graph: a networkx graph object
     """
     plt.figure()
     pos = absolute_node_positions(1, 25)
@@ -144,8 +148,8 @@ def congestion_cost(n):
     logarithmic. I figure that up to a certain point, some more traffic is fine,
     then it gets a lot worse, but after some point the road cannot handle any
     more traffic at all
-    :param n:
-    :return:
+    :param n: the number of agents
+    :return: the cost
     """
     if n < 2:
         return n
@@ -157,9 +161,9 @@ def congestion_cost(n):
 
 def collective_cost(graph, agents_paths):
     """
-    :param graph:
-    :param agents_paths:
-    :return:
+    :param graph: a networkx graph object
+    :param agents_paths: the list of edge paths
+    :return: the total cost
     """
     total_cost = 0
 

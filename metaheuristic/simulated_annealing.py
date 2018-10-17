@@ -37,7 +37,10 @@ class PathsProblem(Annealer):
 
 
     def energy(self):
-        """"""
+        """
+        The energy (cost) of a solution
+        :return:
+        """
         self.temperatures.append(self.Tmax * math.exp(
             self.Tfactor * len(self.energies) / self.steps))
 
@@ -67,9 +70,9 @@ class PathsProblem(Annealer):
 def simulate_annealing(graph, init_states):
     """
     Function to run simulated annealing.
-    :param graph:
-    :param init_states:
-    :return:
+    :param graph: a networkx graph object
+    :param init_states: a list of edge paths
+    :return: the solution, cost, and problem instance
     """
     prob = PathsProblem(init_states, graph)
     prob.steps = 20000
@@ -80,6 +83,13 @@ def simulate_annealing(graph, init_states):
 
 
 def main():
+    """
+    Run simulated annealing once
+    plot the max capacity for the selfish planning (shortest paths) and for
+    the simulated annealing solution, as well as a convergence plot. Print the
+    costs and the solutions
+    :return:
+    """
     graph, init_states = utils.read_graph(os.getcwd() + ct.EDGE_LIST_PATH,
                                           os.getcwd() + ct.INITIAL_STATE_PATH)
 

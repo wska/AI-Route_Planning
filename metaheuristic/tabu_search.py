@@ -122,6 +122,13 @@ def neighbors(graph, state):
 
 
 def main():
+    """
+    Run tabu search once
+    plot the max capacity for the selfish planning (shortest paths) and for
+    the tabu search solution, as well as a convergence plot. Print the
+    costs and the solutions
+    :return:
+    """
     graph, init_states = utils.read_graph(os.getcwd() + ct.EDGE_LIST_PATH,
                                           os.getcwd() + ct.INITIAL_STATE_PATH)
 
