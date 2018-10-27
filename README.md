@@ -1,4 +1,4 @@
-# Artifical Intelligence - Route planning for multiple agents in a system with congestion
+# Artificial Intelligence - Route planning for multiple agents in a system with congestion
 
 ### Authors
 William Skagerström - https://github/com/wska
