@@ -1,4 +1,11 @@
-# DD2380 Artificial Intelligence Team 42: Route Planning
+# Artifical Intelligence - Route planning for multiple agents in a system with congestion
+
+### Authors
+William Skagerström - https://github/com/wska
+Adrian Chmielewski-Anders - https://github/com/adrianc-a
+Bas Straathof - https://github/com/bt-s
+Daniel Skantz - https://github/com/Skantz
+Alex Mellado - https://github/com/jamellado
 
 ### Graphs
 The graphs used in the project can be found in the directory /graphs.
